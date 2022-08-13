@@ -1,7 +1,7 @@
 #**************************************************
 #*** PONER EN True CUANDO SE PASE A PRODUCCIÓN ***
 #**************************************************
-PRODUCCION = False    
+PRODUCCION = True    
 
 import RPi.GPIO as GPIO # para el control de los GPIO de la raspberry
 import Adafruit_DHT     # librería para el sensor de presión y temperatura
@@ -42,8 +42,8 @@ SENSOR = Adafruit_DHT.DHT11     # crea objeto llamado SENSOR. Es para usar en la
 ventana = Tk()                          # Definiciones de la librería tkinter
 ventana.title("CONTROL DOMÓTICA")       # Título de la ventana
 #ventana.iconbitmap('sate.ico')         # Ícono de la ventana
-#ventana.geometry("600x400")            # Define tamaño de pantalla
-ventana.attributes("-fullscreen", True) # Ventana fullscreen
+ventana.geometry("600x400")            # Define tamaño de pantalla
+#ventana.attributes("-fullscreen", True) # Ventana fullscreen
 humedad_var = DoubleVar()               # variables para el slider (tkinter)
 temp_var = DoubleVar()                    
 
@@ -71,9 +71,16 @@ etiqueta_humedad.grid(row=8,column=COL_HUM, padx=10, pady=10)                  #
 ctrl_humedad = Scale(ventana, variable = humedad_var, from_ = HUMEDAD_MAX , to = HUMEDAD_MIN, orient = VERTICAL, activebackground='green2', bd=5,)  #Define el slider de control de humedad
 ctrl_humedad.grid(row=9,column=COL_HUM, padx=10, pady=10)                                                   #define su posición
   
-logging.basicConfig(filename="logTemperatura_Humedad.txt", level=logging.INFO, format="%(asctime)s - %(message)" , datefmt="%d-%m-%Y %H:%M:%S")
-logging.debug("Inicio del programa.-")
-logging.debug("-----------------------------------------------------------")
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[
+        logging.FileHandler("logTemperatura_Humedad.txt"),
+    ]
+)
+
+logging.info('Inicio del programa.')
+logging.info('========================================================\n')
 #************************************************************************************************************************
 #****                                                        FUNCIONES                                               ****
 #************************************************************************************************************************
@@ -102,6 +109,7 @@ def encender_calefactor():
     if(PRODUCCION):
         GPIO.output(CALEFACTOR, True)
         GPIO.output(VENTILADOR, False)
+        logging.info("Calefactor encendido y ventilador apagado.")
     else:
         print("\ncalefactor encendido\nventilación apagada \n\n") #esto solo se imprime en test
         
@@ -110,6 +118,7 @@ def encender_ventilacion():
     if(PRODUCCION):
         GPIO.output(CALEFACTOR, False)
         GPIO.output(VENTILADOR, True)
+        logging.info("Calefactor apagado y ventilador encendido.")
     else:
         print("\ncalefactor apagado\nventilación encendida \n\n") #esto solo se imprime en test
 
@@ -118,6 +127,7 @@ def apaga_calefactor_y_ventilador():
     if(PRODUCCION):
         GPIO.output(VENTILADOR, False)
         GPIO.output(CALEFACTOR, False)
+        logging.info("Calefactor apagado y venitlador apagado.")
     else:
         print("\ncalefactor apagado\nventilación apagada \n\n") #esto solo se imprime en test
         
@@ -147,6 +157,7 @@ def encender_humidificador():
     if(PRODUCCION):
         GPIO.output(HUMIDIFICADOR, True)
         GPIO.output(DESHUMIDIFICADOR, False)
+        logging.info("Humidificador encendido y deshumidificador apagado.")
     else:
         print("\nhumificador encendido\ndesumidificador apagada \n\n") #esto solo se imprime en test
 
@@ -155,6 +166,7 @@ def encender_deshumidificador():
     if(PRODUCCION):
         GPIO.output(HUMIDIFICADOR, False)
         GPIO.output(DESHUMIDIFICADOR, True)
+        logging.info("Deshumidificador encendido y humidificador apagado.")
     else:
         print("Deshumidificador encendido y humidificador apagado") #esto solo se imprime en test
 
@@ -163,6 +175,7 @@ def apaga_humidificador_y_deshumidificador():
     if(PRODUCCION):
         GPIO.output(DESHUMIDIFICADOR, False)
         GPIO.output(HUMIDIFICADOR, False)
+        logging.info("Humidificador y deshumidificador apagado.")
     else:
         print("Humidificador y deshumidificador apagado") #esto solo se imprime en test
 
@@ -190,7 +203,7 @@ def leer_sensor_de_humedad():
 def log_temp_y_hum():
     global ultima_humedad_medida
     global ultima_temperatura_medida
-    logging.debug("Temperatura : %s°C, Humedad: %s%"  %(ultima_temperatura_medida, ultima_humedad_medida))
+    logging.info("Temperatura: %s°C; Humedad: %s%s" %(ultima_temperatura_medida, ultima_humedad_medida, "%"))
 
     ventana.after(INTERVALO_REGISTRO_LOG, log_temp_y_hum)
     
