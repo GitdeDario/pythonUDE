@@ -16,7 +16,7 @@ if(PRODUCCION):
 from tkinter import *           #librería para entorno gráfico 
 root = Tk()                     #Definiciones de la librería tkinter
 root.title("CONTROL DOMÓTICA")  #Título de la ventana
-root.iconbitmap("sate.ico")     #Ícono de la ventana
+#root.iconbitmap("sate.ico")     #Ícono de la ventana
 root.geometry("400x300")        #Define tamaño de pantalla 
 v2 = DoubleVar()                #variable para el slider temperatura
 
