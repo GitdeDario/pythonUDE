@@ -28,14 +28,14 @@ from tkinter import *               # librería para entorno gráfico
 ventana = Tk()                      # Definiciones de la librería tkinter
 ventana.title("CONTROL DOMÓTICA")   # Título de la ventana
 #ventana.iconbitmap("sate.ico")     # Ícono de la ventana
-ventana.geometry("400x300")         # Define tamaño de pantalla
+ventana.geometry("400x300")         # Define tamaño de pantalla 
 v1 = DoubleVar()
 v2 = DoubleVar()                    # variable para el slider (tkinter)
 
 
 # Esta función se ejecuta cuando se presiona el botón confirmar asociado al slider temperatura.
 # Hace que se accionen los controladores térmicos en base a la temperatura ambiente(sensor) y lo 
-# seleccionado por el usuario(slider)
+# seleccionado por el usuario (slider)
 def control_termico():       
     temperatura_seleccionada = v2.get() 
     leer_sensor_de_temperatura()
@@ -46,25 +46,24 @@ def control_termico():
     else:
         encender_ventilacion()
 
+# Enciende calefactor y apaga ventilador
 def encender_calefactor():
-    #enciende calefactor y apaga ventilación
     if(PRODUCCION):
         GPIO.output(CALEFACTOR, True)
         GPIO.output(VENTILADOR, False)
     else:
         print("\ncalefactor encendido\nventilación apagada \n\n") #esto solo se imprime en test
         
-    
+# Enciende ventilador y apaga calefactor    
 def encender_ventilacion():
-    #enciende ventilación y apaga calefactor
     if(PRODUCCION):
         GPIO.output(CALEFACTOR, False)
         GPIO.output(VENTILADOR, True)
     else:
         print("\ncalefactor apagado\nventilación encendida \n\n")
-        
+
+#apaga ventilación y apaga calefactor  
 def apaga_calefactor_y_ventilador():
-    #apaga ventilación y apaga calefactor
     if(PRODUCCION):
         GPIO.output(VENTILADOR, False)
         GPIO.output(CALEFACTOR, False)
@@ -73,9 +72,8 @@ def apaga_calefactor_y_ventilador():
         
 
 # Esta función se ejecuta cuando se presiona el botón confirmar asociado al slider humedad.
-# Hace que se accionen los controladores humificadores  en base a la humedad ambiente(sensor) y lo 
-# seleccionado por el usuario(slider)
-
+# Hace que se accionen los controladores humificadores  en base a la humedad ambiente (sensor) y lo 
+# seleccionado por el usuario (slider)
 def control_humedad():       
     humedad_seleccionada = v1.get() 
     leer_sensor_de_humedad()
@@ -86,24 +84,24 @@ def control_humedad():
     else:
         encender_deshumidificador()
 
+#Enciende humidificador y apaga deshumidificador
 def encender_humidificador():
-    # enciende humificador y apaga desumificador
     if(PRODUCCION):
         GPIO.output(HUMIDIFICADOR, True)
         GPIO.output(DESHUMIDIFICADOR, False)
     else:
         print("\nhumificador encendido\ndesumidificador apagada \n\n") #esto solo se imprime en test
-        
+
+# Enciende deshumidificador y a paga humidificador       
 def encender_deshumidificador():
-    # enciende desumificador y apaga humificador
     if(PRODUCCION):
         GPIO.output(HUMIDIFICADOR, False)
         GPIO.output(DESHUMIDIFICADOR, True)
     else:
         print("Deshumidificador encendido")
 
+# Apaga humidificador y deshumidificador
 def apaga_humidificador_y_deshumidificador():
-    # apaga desumificador y humificador
     if(PRODUCCION):
         GPIO.output(DESHUMIDIFICADOR, False)
         GPIO.output(HUMIDIFICADOR, False)
@@ -122,14 +120,14 @@ def interrogar_sensor_dht():                                            # funcio
         print("Humidity    (%):",humidity)
         
     else:
-        print('Failed to get reading. Try again!')
+       print('Failed to get reading. Try again!')
         
 
     return temperature, humidity
-#l_t = Tk.lablel(frame, text="Temp *C Hume %", font=("Arial",10))
-#l_t.grid(row = 2, column = 3, padx = 10, pady = 10, sticky = "nsew")
-#l_display = tk.lablel(frame, font=("Arial",20), fg = "red")
-#l_display.grid(row = 3, column = 3, padx = 10, pady = 10, sticky = "nsew")
+l_t = Tk.lablel(ventana, text="Temp *C Hume %", font=("Arial",10))
+l_t.grid(row = 2, column = 3, padx = 10, pady = 10, sticky = "nsew")
+l_display = Tk.lablel(ventana, font=("Arial",20), fg = "red")
+l_display.grid(row = 3, column = 3, padx = 10, pady = 10, sticky = "nsew")
 
 #def leer_sensor_de_temperatura():
 #    temp_amb = interrogar_sensor_dht()[0]                        # LO QUE LEE EL SENSOR
