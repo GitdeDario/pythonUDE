@@ -3,9 +3,10 @@
 #**************************************************
 PRODUCCION = False    
 
-import RPi.GPIO as GPIO       # para el control de los GPIO de la raspberry
-import Adafruit_DHT          # librería para el sensor de presión y temperatura
-from tkinter import *               # librería para entorno gráfico
+import RPi.GPIO as GPIO # para el control de los GPIO de la raspberry
+import Adafruit_DHT     # librería para el sensor de presión y temperatura
+from tkinter import *   # librería para entorno gráfico
+import logging          # para generar los log en un archivo txt    
 
 # CONSTANTES
 TEMP_MIN = 10       # Temperatura mínima que se puede elegir
@@ -14,27 +15,28 @@ HUMEDAD_MAX = 100   # Humedad máxima seteable
 HUMEDAD_MIN = 30    # Humedad mínima seteable
 COL_TEMP = 30       # Para el control de posición de la columna de los controles de temperatura
 COL_HUM = 2         # Ídem para los controles de humedad
-TIEMPO_REFRESCO_LECTURA_HUMEDAD = 10000 # En milisegundos!!
+TIEMPO_REFRESCO_LECTURA_HUMEDAD = 10000     # En milisegundos!!
 TIEMPO_REFRESCO_LECTURA_TEMPERATURA = 10000 # En milisegundos!!
+INTERVALO_REGISTRO_LOG = 60000              # En milisegundos!! (cada un minuto)
 
 # DEFINICIÓN DE LOS GPIO
 GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BOARD)                # lo uso en el modo BOARD
-CALEFACTOR = 11                         # El led que representa el calefactor va en el pin 3 (*****CAMBIAR SI ES NECESARIO******)
+GPIO.setmode(GPIO.BCM)                  # Se usa en modo BOARD
+CALEFACTOR = 22                         # El led que representa el calefactor LED ROJO
 GPIO.setup(CALEFACTOR, GPIO.OUT)        # Se setea el pin correspondiente como salida ya que va a controlar un actuador
 GPIO.output(CALEFACTOR, False)          # El calefactor inicia apagado cuando arranca el sistema
-VENTILADOR = 12                         # El led que representa el ventilador va en el pin 4 (*****CAMBIAR SI ES NECESARIO******)
+VENTILADOR = 13                         # El led que representa el ventilador LED AZUL
 GPIO.setup(VENTILADOR, GPIO.OUT)        # Se setea el pin correspondiente como salida ya que va a controlar un actuador
 GPIO.output(VENTILADOR, False)          # El ventilador inicia apagado cuando arranca el sistema
-HUMIDIFICADOR = 13                      # El led que representa el calefactor va en el pin 3 (*****CAMBIAR SI ES NECESARIO******)
+HUMIDIFICADOR = 6                       # El led que representa el humidificador LED AMARILLO
 GPIO.setup(HUMIDIFICADOR, GPIO.OUT)     # Se setea el pin correspondiente como salida ya que va a controlar un actuador
-GPIO.output(HUMIDIFICADOR, False)       # El calefactor inicia apagado cuando arranca el sistema
-DESHUMIDIFICADOR = 16                   # El led que representa el ventilador va en el pin 4 (*****CAMBIAR SI ES NECESARIO******)
+GPIO.output(HUMIDIFICADOR, False)       # El humidificador inicia apagado cuando arranca el sistema
+DESHUMIDIFICADOR = 5                    # El led que representa el deshumidificador LED BLANCO
 GPIO.setup(DESHUMIDIFICADOR, GPIO.OUT)  # Se setea el pin correspondiente como salida ya que va a controlar un actuador
-GPIO.output(DESHUMIDIFICADOR, False)    # El ventilador inicia apagado cuando arranca el sistema
-    
-PIN_SENSOR = 4                  # pin de lectura de Dht11        
-SENSOR=Adafruit_DHT.DHT11       # crea objeto llamado sensor_DHT
+GPIO.output(DESHUMIDIFICADOR, False)    # El humidificador inicia apagado cuando arranca el sistema
+                      
+PIN_SENSOR = 4                  # pin de lectura del sensor DHT11        
+SENSOR = Adafruit_DHT.DHT11     # crea objeto llamado SENSOR. Es para usar en la lectura del DHT11
 
 # DEFINICIONES PARA tkinter
 ventana = Tk()                          # Definiciones de la librería tkinter
@@ -69,6 +71,9 @@ etiqueta_humedad.grid(row=8,column=COL_HUM, padx=10, pady=10)                  #
 ctrl_humedad = Scale(ventana, variable = humedad_var, from_ = HUMEDAD_MAX , to = HUMEDAD_MIN, orient = VERTICAL, activebackground='green2', bd=5,)  #Define el slider de control de humedad
 ctrl_humedad.grid(row=9,column=COL_HUM, padx=10, pady=10)                                                   #define su posición
   
+logging.basicConfig(filename="logTemperatura_Humedad.txt", level=logging.INFO, format="%(asctime)s - %(message)" , datefmt="%d-%m-%Y %H:%M:%S")
+logging.debug("Inicio del programa.-")
+logging.debug("-----------------------------------------------------------")
 #************************************************************************************************************************
 #****                                                        FUNCIONES                                               ****
 #************************************************************************************************************************
@@ -82,9 +87,9 @@ def control_termico():
     temperatura_seleccionada = temp_var.get() 
     temperatura_ambiente = leer_sensor_de_temperatura()
     
-    if(temperatura_ambiente is not None):
-        ultima_temperatura_medida = temperatura_ambiente
-        
+    if(temperatura_ambiente is not None):                   # Esto se necesita porque el sensor no lee cada vez que se lo interroga. Cuando no lee, responde None
+        ultima_temperatura_medida = temperatura_ambiente    # y eso da problemas al intentar imprimir en la pantalla de tkinter. Para solucionarlo se mantiene guardad
+                                                            # el ultimo valor bueno medido
     if(temperatura_seleccionada > ultima_temperatura_medida):
         encender_calefactor() 
     elif(temperatura_seleccionada == ultima_temperatura_medida):
@@ -126,8 +131,9 @@ def control_humedad():
     humedad_seleccionada = humedad_var.get() 
     humedad_ambiente = leer_sensor_de_humedad()
     
-    if(humedad_ambiente is not None):
-        ultima_humedad_medida = humedad_ambiente
+    if(humedad_ambiente is not None):               # Esto se necesita porque el sensor no lee cada vez que se lo interroga. Cuando no lee, responde None
+        ultima_humedad_medida = humedad_ambiente    # y eso da problemas al intentar imprimir en la pantalla de tkinter. Para solucionarlo se mantiene guardad
+                                                    # el ultimo valor bueno medido
         
     if(humedad_seleccionada > ultima_humedad_medida):
         encender_humidificador() 
@@ -161,24 +167,33 @@ def apaga_humidificador_y_deshumidificador():
         print("Humidificador y deshumidificador apagado") #esto solo se imprime en test
 
 
-def interrogar_sensor_dht():                                            # funcion indica la temperatura, cada 5 segundos actualiza el valor
-    temperatura, humedad = Adafruit_DHT.read(SENSOR,PIN_SENSOR) # 4 is ithe GPIO number you can change this to your required need
+def interrogar_sensor_dht():                                   
+    temperatura, humedad = Adafruit_DHT.read(SENSOR,PIN_SENSOR)
     
     return humedad, temperatura
 
 def leer_sensor_de_temperatura():
-    temp_amb = interrogar_sensor_dht()[0]                        # LO QUE LEE EL SENSOR
+    temp_amb = interrogar_sensor_dht()[0]
     if (temp_amb is not None):
         muestra_temp_amb.config(text = str(temp_amb) + "°C")
     ventana.after(TIEMPO_REFRESCO_LECTURA_TEMPERATURA, leer_sensor_de_temperatura)
-    return temp_amb                                              #
+    return temp_amb
 
 def leer_sensor_de_humedad():
-    hume_amb = interrogar_sensor_dht()[1]                                                                    # LO QUE LEE EL SENSOR
+    hume_amb = interrogar_sensor_dht()[1]
     if (hume_amb is not None):
         muestra_humedad_amb.config(text = str(hume_amb) + "%")
     ventana.after(TIEMPO_REFRESCO_LECTURA_HUMEDAD, leer_sensor_de_humedad)
     return hume_amb
+
+# Registra en el archivo txt los valores de temperatura y humedad 
+def log_temp_y_hum():
+    global ultima_humedad_medida
+    global ultima_temperatura_medida
+    logging.debug("Temperatura : %s°C, Humedad: %s%"  %(ultima_temperatura_medida, ultima_humedad_medida))
+
+    ventana.after(INTERVALO_REGISTRO_LOG, log_temp_y_hum)
+    
 
 #************************************************************************************************************************
 #****                                          FIN DEFINICION FUNCIONES                                              ****
@@ -196,5 +211,6 @@ leer_sensor_de_temperatura()    # Para que ponga en pantalla la temperatura apen
 leer_sensor_de_humedad()        # Para que ponga en pantalla la humedad apenas arranca el programa, después se va refrescando cada 10s....o cuando el sensor quiere
 ventana.after(TIEMPO_REFRESCO_LECTURA_TEMPERATURA, leer_sensor_de_temperatura)
 ventana.after(TIEMPO_REFRESCO_LECTURA_HUMEDAD, leer_sensor_de_humedad)
+ventana.after(INTERVALO_REGISTRO_LOG, log_temp_y_hum)
   
 ventana.mainloop() 
