@@ -1,17 +1,15 @@
 debug = True
    
 import RPi.GPIO as GPIO             #para el control de los GPIO de la raspberry
-from time import sleep, strftime, time
 import RPi.GPIO as GPIO
 import tkinter as tk
-import time
 import threading
 import Adafruit_DHT as dht
-import pyfiglet
+#import pyfiglet
  
 
-font = pyfiglet.figlet_format('Control Domotica') # cartel de inicio
-print(font)
+#font = pyfiglet.figlet_format('Control Domotica') # cartel de inicio
+#print(font)
 
 pin = 21 # pin de lectura de Dht11
 sensor = dht.DHT11 # creo objeto llamado sensor

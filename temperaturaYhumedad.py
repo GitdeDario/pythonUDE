@@ -7,62 +7,71 @@ import RPi.GPIO as GPIO       # para el control de los GPIO de la raspberry
 import Adafruit_DHT          # librería para el sensor de presión y temperatura
 from tkinter import *               # librería para entorno gráfico
 
-TEMP_MIN = 10
-TEMP_MAX = 30
-HUMEDAD_MAX = 100
-HUMEDAD_MIN = 30
-COL_TEMP = 30
-COL_HUM = 2
+# CONSTANTES
+TEMP_MIN = 10       # Temperatura mínima que se puede elegir
+TEMP_MAX = 30       # Temperatura máxima que se puede elegir
+HUMEDAD_MAX = 100   # Humedad máxima seteable
+HUMEDAD_MIN = 30    # Humedad mínima seteable
+COL_TEMP = 30       # Para el control de posición de la columna de los controles de temperatura
+COL_HUM = 2         # Ídem para los controles de humedad
+TIEMPO_REFRESCO_LECTURA_HUMEDAD = 10000 # En milisegundos!!
+TIEMPO_REFRESCO_LECTURA_TEMPERATURA = 10000 # En milisegundos!!
 
+# DEFINICIÓN DE LOS GPIO
 GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BOARD)            # lo uso en el modo BOARD
-CALEFACTOR = 11                      # El led que representa el calefactor va en el pin 3 (*****CAMBIAR SI ES NECESARIO******)
-GPIO.setup(CALEFACTOR, GPIO.OUT)    # Se setea el pin correspondiente como salida ya que va a controlar un actuador
-GPIO.output(CALEFACTOR, False)      # El calefactor inicia apagado cuando arranca el sistema
-VENTILADOR = 12                      # El led que representa el ventilador va en el pin 4 (*****CAMBIAR SI ES NECESARIO******)
-GPIO.setup(VENTILADOR, GPIO.OUT)    # Se setea el pin correspondiente como salida ya que va a controlar un actuador
-GPIO.output(VENTILADOR, False)      # El ventilador inicia apagado cuando arranca el sistema
+GPIO.setmode(GPIO.BOARD)                # lo uso en el modo BOARD
+CALEFACTOR = 11                         # El led que representa el calefactor va en el pin 3 (*****CAMBIAR SI ES NECESARIO******)
+GPIO.setup(CALEFACTOR, GPIO.OUT)        # Se setea el pin correspondiente como salida ya que va a controlar un actuador
+GPIO.output(CALEFACTOR, False)          # El calefactor inicia apagado cuando arranca el sistema
+VENTILADOR = 12                         # El led que representa el ventilador va en el pin 4 (*****CAMBIAR SI ES NECESARIO******)
+GPIO.setup(VENTILADOR, GPIO.OUT)        # Se setea el pin correspondiente como salida ya que va a controlar un actuador
+GPIO.output(VENTILADOR, False)          # El ventilador inicia apagado cuando arranca el sistema
 HUMIDIFICADOR = 13                      # El led que representa el calefactor va en el pin 3 (*****CAMBIAR SI ES NECESARIO******)
-GPIO.setup(HUMIDIFICADOR, GPIO.OUT)    # Se setea el pin correspondiente como salida ya que va a controlar un actuador
-GPIO.output(HUMIDIFICADOR, False)      # El calefactor inicia apagado cuando arranca el sistema
-DESHUMIDIFICADOR = 16                      # El led que representa el ventilador va en el pin 4 (*****CAMBIAR SI ES NECESARIO******)
-GPIO.setup(DESHUMIDIFICADOR, GPIO.OUT)    # Se setea el pin correspondiente como salida ya que va a controlar un actuador
-GPIO.output(DESHUMIDIFICADOR, False)      # El ventilador inicia apagado cuando arranca el sistema
+GPIO.setup(HUMIDIFICADOR, GPIO.OUT)     # Se setea el pin correspondiente como salida ya que va a controlar un actuador
+GPIO.output(HUMIDIFICADOR, False)       # El calefactor inicia apagado cuando arranca el sistema
+DESHUMIDIFICADOR = 16                   # El led que representa el ventilador va en el pin 4 (*****CAMBIAR SI ES NECESARIO******)
+GPIO.setup(DESHUMIDIFICADOR, GPIO.OUT)  # Se setea el pin correspondiente como salida ya que va a controlar un actuador
+GPIO.output(DESHUMIDIFICADOR, False)    # El ventilador inicia apagado cuando arranca el sistema
     
 PIN_SENSOR = 4                  # pin de lectura de Dht11        
 SENSOR=Adafruit_DHT.DHT11       # crea objeto llamado sensor_DHT
 
-ventana = Tk()                      # Definiciones de la librería tkinter
-ventana.title("CONTROL DOMÓTICA")   # Título de la ventana
-#ventana.iconbitmap('sate.ico')     # Ícono de la ventana
-#ventana.geometry("600x400")         # Define tamaño de pantalla
-ventana.attributes("-fullscreen", True)
-humedad_var = DoubleVar()
-temp_var = DoubleVar()                    # variable para el slider (tkinter)
+# DEFINICIONES PARA tkinter
+ventana = Tk()                          # Definiciones de la librería tkinter
+ventana.title("CONTROL DOMÓTICA")       # Título de la ventana
+#ventana.iconbitmap('sate.ico')         # Ícono de la ventana
+#ventana.geometry("600x400")            # Define tamaño de pantalla
+ventana.attributes("-fullscreen", True) # Ventana fullscreen
+humedad_var = DoubleVar()               # variables para el slider (tkinter)
+temp_var = DoubleVar()                    
 
-
+# tkinter - humedad medida por el sensor
 etiqueta_humedad_amb = Label(ventana, text="Humedad", font=("Arial",15))
 etiqueta_humedad_amb.grid(row = 2, column = COL_HUM, padx = 10, pady = 10, sticky = "nsew")
 muestra_humedad_amb = Label(ventana, font=("Arial",20), fg = "red")
 muestra_humedad_amb.grid(row = 3, column = COL_HUM, padx = 10, pady = 10, sticky = "nsew")
 
+# tkinter - temperatura medida por el sensor
 etiqueta_temp_amb = Label(ventana, text="Temperatura", font=("Arial",15))
 etiqueta_temp_amb.grid(row = 2, column = COL_TEMP, padx = 10, pady = 10, sticky = "nsew")
 muestra_temp_amb = Label(ventana, font=("Arial",20), fg = "red")
 muestra_temp_amb.grid(row = 3, column = COL_TEMP, padx = 10, pady = 10, sticky = "nsew")
 
+# tkinter - slider/selector de temperatura
 etiqueta_temp = Label(ventana, text = "Selector Temperatura °C")   #define la etiqueta "Temperatura"
 etiqueta_temp.grid(row=8,column=COL_TEMP, padx=10, pady=10)             #define la posición de la etiqueta
-
 ctrl_temp = Scale(ventana, variable = temp_var, from_ = TEMP_MAX, to = TEMP_MIN, orient = VERTICAL, activebackground='green2', bd=5,)  #Define el slider de control de temp
 ctrl_temp.grid(row=9,column=COL_TEMP, padx=10, pady=10)                                                                  #define su posición
 
+# tkinter - slider/selector de humedad
 etiqueta_humedad = Label(ventana, text = "Selector Humedad %")                             #define la etiqueta "Humidity Selector"
 etiqueta_humedad.grid(row=8,column=COL_HUM, padx=10, pady=10)                  #define la posición de la etiqueta
-
 ctrl_humedad = Scale(ventana, variable = humedad_var, from_ = HUMEDAD_MAX , to = HUMEDAD_MIN, orient = VERTICAL, activebackground='green2', bd=5,)  #Define el slider de control de humedad
 ctrl_humedad.grid(row=9,column=COL_HUM, padx=10, pady=10)                                                   #define su posición
   
+#************************************************************************************************************************
+#****                                                        FUNCIONES                                               ****
+#************************************************************************************************************************
 
 # Esta función se ejecuta cuando se presiona el botón confirmar asociado al slider temperatura.
 # Hace que se accionen los controladores térmicos en base a la temperatura ambiente(sensor) y lo 
@@ -156,35 +165,36 @@ def interrogar_sensor_dht():                                            # funcio
     temperatura, humedad = Adafruit_DHT.read(SENSOR,PIN_SENSOR) # 4 is ithe GPIO number you can change this to your required need
     
     return humedad, temperatura
-    
-
 
 def leer_sensor_de_temperatura():
     temp_amb = interrogar_sensor_dht()[0]                        # LO QUE LEE EL SENSOR
     if (temp_amb is not None):
         muestra_temp_amb.config(text = str(temp_amb) + "°C")
-    ventana.after(10000, leer_sensor_de_temperatura)
+    ventana.after(TIEMPO_REFRESCO_LECTURA_TEMPERATURA, leer_sensor_de_temperatura)
     return temp_amb                                              #
 
 def leer_sensor_de_humedad():
     hume_amb = interrogar_sensor_dht()[1]                                                                    # LO QUE LEE EL SENSOR
     if (hume_amb is not None):
         muestra_humedad_amb.config(text = str(hume_amb) + "%")
-    ventana.after(10000, leer_sensor_de_humedad)
+    ventana.after(TIEMPO_REFRESCO_LECTURA_HUMEDAD, leer_sensor_de_humedad)
     return hume_amb
 
-leer_sensor_de_temperatura()              #Esta es la temperatura que nos da el sensor de temperatura
-  
+#************************************************************************************************************************
+#****                                          FIN DEFINICION FUNCIONES                                              ****
+#************************************************************************************************************************
+
+
+
 boton_temp = Button(ventana, text ="Confirmar", command = control_termico, activebackground = 'yellow', width = 10 )      #define el botón para confirmar la temp seleccionada
 boton_temp.grid(row=10,column=COL_TEMP, padx=10, pady=10)                                                                 #define la posición del botón
-
-
-leer_sensor_de_humedad()                                  #Esta es la humedad que nos da el sensor de temperatura
 
 boton_humedad = Button(ventana, text ="Confirmar", command = control_humedad, activebackground = 'yellow', width = 10 )    #defie el botón para confirmar la humedad seleccionada
 boton_humedad.grid(row=10,column=COL_HUM, padx=10, pady=10)                                                                          #define la posición del botón
 
-ventana.after(10000, leer_sensor_de_temperatura)
-ventana.after(10000, leer_sensor_de_humedad)
+leer_sensor_de_temperatura()    # Para que ponga en pantalla la temperatura apenas arranca el programa, después se va refrescando cada 10s....o cuando el sensor quiere
+leer_sensor_de_humedad()        # Para que ponga en pantalla la humedad apenas arranca el programa, después se va refrescando cada 10s....o cuando el sensor quiere
+ventana.after(TIEMPO_REFRESCO_LECTURA_TEMPERATURA, leer_sensor_de_temperatura)
+ventana.after(TIEMPO_REFRESCO_LECTURA_HUMEDAD, leer_sensor_de_humedad)
   
 ventana.mainloop() 
