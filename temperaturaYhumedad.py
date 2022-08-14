@@ -7,6 +7,7 @@ import RPi.GPIO as GPIO # para el control de los GPIO de la raspberry
 import Adafruit_DHT     # librería para el sensor de presión y temperatura
 from tkinter import *   # librería para entorno gráfico
 import logging          # para generar los log en un archivo txt    
+import os               # para poder ejecutar comandos. En particular se usa para abrir el archivo de logs
 
 # CONSTANTES
 TEMP_MIN = 10       # Temperatura mínima que se puede elegir
@@ -85,6 +86,9 @@ logging.info('==================================================================
 #************************************************************************************************************************
 #****                                                        FUNCIONES                                               ****
 #************************************************************************************************************************
+
+def abrir_archivo_logs():
+    os.system("logTemperatura_Humedad.txt")
 def actualizar_temp_seleccionada():
     global temperatura_seleccionada
     temperatura_seleccionada = temp_var.get()
@@ -247,6 +251,8 @@ boton_temp.grid(row=10,column=COL_TEMP, padx=10, pady=10)                       
 boton_humedad = Button(ventana, text ="Confirmar", command = actualizar_humedad_seleccionada, activebackground = 'yellow', width = 10 )    #defie el botón para confirmar la humedad seleccionada
 boton_humedad.grid(row=10,column=COL_HUM, padx=10, pady=10)                                                                          #define la posición del botón
 
+boton_log = Button(ventana, text ="Consultar LOG", command = abrir_archivo_logs, activebackground = 'yellow', width = 10 )    #defie el botón para confirmar la humedad seleccionada
+boton_log.grid(row=10,column=COL_HUM+10, padx=10, pady=10)        
 
 ventana.after(TIEMPO_REFRESCO_LECTURA_TEMPERATURA, control_termico)
 ventana.after(TIEMPO_REFRESCO_LECTURA_HUMEDAD, control_humedad)
