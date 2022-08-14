@@ -15,9 +15,9 @@ HUMEDAD_MAX = 100   # Humedad máxima seteable
 HUMEDAD_MIN = 30    # Humedad mínima seteable
 COL_TEMP = 30       # Para el control de posición de la columna de los controles de temperatura
 COL_HUM = 2         # Ídem para los controles de humedad
-TIEMPO_REFRESCO_LECTURA_HUMEDAD = 5000     # En milisegundos!!
-TIEMPO_REFRESCO_LECTURA_TEMPERATURA = 5000 # En milisegundos!!
-INTERVALO_REGISTRO_LOG = 30000              # En milisegundos!! (cada medio minuto)
+TIEMPO_REFRESCO_LECTURA_HUMEDAD = 30000     # En milisegundos!!
+TIEMPO_REFRESCO_LECTURA_TEMPERATURA = 30000 # En milisegundos!!
+INTERVALO_REGISTRO_LOG = 60000              # En milisegundos!! (cada medio minuto)
 
 # DEFINICIÓN DE LOS GPIO
 GPIO.setwarnings(False)
@@ -64,13 +64,14 @@ etiqueta_temp = Label(ventana, text = "Selector Temperatura °C")   #define la e
 etiqueta_temp.grid(row=8,column=COL_TEMP, padx=10, pady=10)             #define la posición de la etiqueta
 ctrl_temp = Scale(ventana, variable = temp_var, from_ = TEMP_MAX, to = TEMP_MIN, orient = VERTICAL, activebackground='green2', bd=5,)  #Define el slider de control de temp
 ctrl_temp.grid(row=9,column=COL_TEMP, padx=10, pady=10)                                                                  #define su posición
+ctrl_temp.set(25)
 
 # tkinter - slider/selector de humedad
 etiqueta_humedad = Label(ventana, text = "Selector Humedad %")                             #define la etiqueta "Humidity Selector"
 etiqueta_humedad.grid(row=8,column=COL_HUM, padx=10, pady=10)                  #define la posición de la etiqueta
 ctrl_humedad = Scale(ventana, variable = humedad_var, from_ = HUMEDAD_MAX , to = HUMEDAD_MIN, orient = VERTICAL, activebackground='green2', bd=5,)  #Define el slider de control de humedad
 ctrl_humedad.grid(row=9,column=COL_HUM, padx=10, pady=10)                                                   #define su posición
-  
+ctrl_humedad.set(65)  
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
@@ -78,33 +79,45 @@ logging.basicConfig(
         logging.FileHandler("logTemperatura_Humedad.txt"),
     ]
 )
-
-logging.info('Inicio del programa.')
-logging.info('========================================================\n')
+logging.info('===================================================================================================================\n')
+logging.info('                              I              Inicio del programa.')
+logging.info('===================================================================================================================\n')
 #************************************************************************************************************************
 #****                                                        FUNCIONES                                               ****
 #************************************************************************************************************************
+def actualizar_temp_seleccionada():
+    global temperatura_seleccionada
+    temperatura_seleccionada = temp_var.get()
+    control_termico()
+    
+def actualizar_humedad_seleccionada():
+    global humedad_seleccionada
+    humedad_seleccionada = humedad_var.get()
+    control_humedad()
+
 
 # Esta función se ejecuta cuando se presiona el botón confirmar asociado al slider temperatura.
 # Hace que se accionen los controladores térmicos en base a la temperatura ambiente(sensor) y lo 
 # seleccionado por el usuario (slider)
 ultima_temperatura_medida = 25
+temperatura_seleccionada = 25
 def control_termico():
     global ultima_temperatura_medida
-    temperatura_seleccionada = temp_var.get() 
+    global temperatura_seleccionada 
     temperatura_ambiente = leer_sensor_de_temperatura()
+
 # Esto se necesita porque el sensor no lee cada vez que se lo interroga. Cuando no lee, responde None y eso da problemas al intentar imprimir
 # en la pantalla de tkinter. Para solucionarlo se mantiene guardado el ultimo valor bueno medido. Además, actualizamos los registros solo
 # si hay cambios en los valores medidos (por ej, para no recargar el log)
     if((temperatura_ambiente is not None) and (temperatura_ambiente != ultima_temperatura_medida)):                   
-        ultima_temperatura_medida = temperatura_ambiente    
-                                                            
-        if(temperatura_seleccionada > ultima_temperatura_medida):
-            encender_calefactor() 
-        elif(temperatura_seleccionada == ultima_temperatura_medida):
-            apaga_calefactor_y_ventilador()
-        else:
-            encender_ventilacion()
+        ultima_temperatura_medida = int(temperatura_ambiente)
+        
+    if(temperatura_seleccionada > ultima_temperatura_medida):
+        encender_calefactor()
+    elif(temperatura_seleccionada == ultima_temperatura_medida):
+        apaga_calefactor_y_ventilador()
+    else:
+        encender_ventilacion()
 
     ventana.after(TIEMPO_REFRESCO_LECTURA_TEMPERATURA, control_termico) # Periódicamente ejecuta la función por si hay que ajustar el control térmico en función de la 
                                                                         # temperatura hambiente y la seleccionada
@@ -114,50 +127,51 @@ def encender_calefactor():
     if(PRODUCCION):
         GPIO.output(CALEFACTOR, True)
         GPIO.output(VENTILADOR, False)
-        logging.info("Calefactor encendido y ventilador apagado.")
+        logging.info("Temperatura: %s°C; Humedad: %s%s. Temperatura seleccionada: %s°C. Calefactor encendido y ventilación apagada" %(ultima_temperatura_medida, ultima_humedad_medida, "%", temperatura_seleccionada))
     else:
-        print("\ncalefactor encendido\nventilación apagada \n\n") #esto solo se imprime en test
+        print("Temperatura: %s°C; Humedad: %s%s. Temperatura seleccionada: %s°C. Calefactor encendido y ventilación apagada" %(ultima_temperatura_medida, ultima_humedad_medida, "%", temperatura_seleccionada)) #esto solo se imprime en test
         
 # Enciende ventilador y apaga calefactor    
 def encender_ventilacion():
     if(PRODUCCION):
         GPIO.output(CALEFACTOR, False)
         GPIO.output(VENTILADOR, True)
-        logging.info("Calefactor apagado y ventilador encendido.")
+        logging.info("Temperatura: %s°C; Humedad: %s%s. Temperatura seleccionada: %s°C. Calefactor apagado y ventilación encendida" %(ultima_temperatura_medida, ultima_humedad_medida, "%", temperatura_seleccionada))
     else:
-        print("\ncalefactor apagado\nventilación encendida \n\n") #esto solo se imprime en test
+        print("Temperatura: %s°C; Humedad: %s%s. Temperatura seleccionada: %s°C. Calefactor apagado y ventilación encendida" %(ultima_temperatura_medida, ultima_humedad_medida, "%", temperatura_seleccionada)) #esto solo se imprime en test
 
 #apaga ventilación y apaga calefactor  
 def apaga_calefactor_y_ventilador():
     if(PRODUCCION):
         GPIO.output(VENTILADOR, False)
         GPIO.output(CALEFACTOR, False)
-        logging.info("Calefactor apagado y venitlador apagado.")
+        logging.info("Temperatura: %s°C; Humedad: %s%s. Temperatura seleccionada: %s°C. Calefactor apagado y ventilación apagada" %(ultima_temperatura_medida, ultima_humedad_medida, "%", temperatura_seleccionada))
     else:
-        print("\ncalefactor apagado\nventilación apagada \n\n") #esto solo se imprime en test
+        print("Temperatura: %s°C; Humedad: %s%s. Temperatura seleccionada: %s°C. Calefactor apagado y ventilación apagada" %(ultima_temperatura_medida, ultima_humedad_medida, "%", temperatura_seleccionada)) #esto solo se imprime en test
         
 
 # Esta función se ejecuta cuando se presiona el botón confirmar asociado al slider humedad.
 # Hace que se accionen los controladores humificadores  en base a la humedad ambiente (sensor) y lo 
 # seleccionado por el usuario (slider)        
 ultima_humedad_medida = 65
+humedad_seleccionada = 65
 def control_humedad():
     global ultima_humedad_medida
-    humedad_seleccionada = humedad_var.get() 
+    global humedad_seleccionada
     humedad_ambiente = leer_sensor_de_humedad()
 
 # Esto se necesita porque el sensor no lee cada vez que se lo interroga. Cuando no lee, responde None y eso da problemas al intentar imprimir
 # en la pantalla de tkinter. Para solucionarlo se mantiene guardado el ultimo valor bueno medido. Además, actualizamos los registros solo
 # si hay cambios en los valores medidos (por ej, para no recargar el log)
     if((humedad_ambiente is not None) and (humedad_ambiente != ultima_humedad_medida)):               
-        ultima_humedad_medida = humedad_ambiente
+        ultima_humedad_medida = int(humedad_ambiente)
         
-        if(humedad_seleccionada > ultima_humedad_medida):
-            encender_humidificador() 
-        elif(humedad_seleccionada == ultima_humedad_medida):
-            apaga_humidificador_y_deshumidificador()
-        else:
-            encender_deshumidificador()
+    if(humedad_seleccionada > ultima_humedad_medida):
+        encender_humidificador() 
+    elif(humedad_seleccionada == ultima_humedad_medida):
+        apaga_humidificador_y_deshumidificador()
+    else:
+        encender_deshumidificador()
 
     ventana.after(TIEMPO_REFRESCO_LECTURA_HUMEDAD, control_humedad) # Periódicamente ejecuta la función por si hay que ajustar el control térmico en función de la 
                                                                         # humedad hambiente y la seleccionada
@@ -167,27 +181,27 @@ def encender_humidificador():
     if(PRODUCCION):
         GPIO.output(HUMIDIFICADOR, True)
         GPIO.output(DESHUMIDIFICADOR, False)
-        logging.info("Humidificador encendido y deshumidificador apagado.")
+        logging.info("Temperatura: %s°C; Humedad: %s%s. Humedad seleccionada: %s°C. Humidificador encendido y deshumidificador apagado" %(ultima_temperatura_medida, ultima_humedad_medida, "%", humedad_seleccionada))
     else:
-        print("\nhumificador encendido\ndesumidificador apagada \n\n") #esto solo se imprime en test
+        print("Temperatura: %s°C; Humedad: %s%s. Humedad seleccionada: %s°C. Humidificador encendido y deshumidificador apagado" %(ultima_temperatura_medida, ultima_humedad_medida, "%", humedad_seleccionada)) #esto solo se imprime en test
 
 # Enciende deshumidificador y a paga humidificador       
 def encender_deshumidificador():
     if(PRODUCCION):
         GPIO.output(HUMIDIFICADOR, False)
         GPIO.output(DESHUMIDIFICADOR, True)
-        logging.info("Deshumidificador encendido y humidificador apagado.")
+        logging.info("Temperatura: %s°C; Humedad: %s%s. Humedad seleccionada: %s°C. Humidificador apagado y deshumidificador encendido" %(ultima_temperatura_medida, ultima_humedad_medida, "%", humedad_seleccionada))
     else:
-        print("Deshumidificador encendido y humidificador apagado") #esto solo se imprime en test
+        print("Temperatura: %s°C; Humedad: %s%s. Humedad seleccionada: %s°C. Humidificador apagado y deshumidificador encendido" %(ultima_temperatura_medida, ultima_humedad_medida, "%", humedad_seleccionada)) #esto solo se imprime en test
 
 # Apaga humidificador y deshumidificador
 def apaga_humidificador_y_deshumidificador():
     if(PRODUCCION):
         GPIO.output(DESHUMIDIFICADOR, False)
         GPIO.output(HUMIDIFICADOR, False)
-        logging.info("Humidificador y deshumidificador apagado.")
+        logging.info("Temperatura: %s°C; Humedad: %s%s. Humedad seleccionada: %s°C. Humidificador apagado y deshumidificador apagado" %(ultima_temperatura_medida, ultima_humedad_medida, "%", humedad_seleccionada))
     else:
-        print("Humidificador y deshumidificador apagado") #esto solo se imprime en test
+        print("Temperatura: %s°C; Humedad: %s%s. Humedad seleccionada: %s°C. Humidificador apagado y deshumidificador apagado" %(ultima_temperatura_medida, ultima_humedad_medida, "%", humedad_seleccionada)) #esto solo se imprime en test
 
 
 def interrogar_sensor_dht():                                   
@@ -198,22 +212,25 @@ def interrogar_sensor_dht():
 def leer_sensor_de_temperatura():
     temp_amb = interrogar_sensor_dht()[0]
     if (temp_amb is not None):
-        muestra_temp_amb.config(text = str(int(temp_amb)) + "°C")
-    #ventana.after(TIEMPO_REFRESCO_LECTURA_TEMPERATURA, leer_sensor_de_temperatura)
+        muestra_temp_amb.config(text = str(temp_amb) + "°C")
+        
     return temp_amb
 
 def leer_sensor_de_humedad():
     hume_amb = interrogar_sensor_dht()[1]
     if (hume_amb is not None):
-        muestra_humedad_amb.config(text = str(int(hume_amb)) + "%")
-    #ventana.after(TIEMPO_REFRESCO_LECTURA_HUMEDAD, leer_sensor_de_humedad)
+        muestra_humedad_amb.config(text = str(hume_amb) + "%")
+
     return hume_amb
 
 # Registra en el archivo txt los valores de temperatura y humedad 
 def log_temp_y_hum():
     global ultima_humedad_medida
     global ultima_temperatura_medida
-    logging.info("Temperatura: %s°C; Humedad: %s%s" %(ultima_temperatura_medida, ultima_humedad_medida, "%"))
+    if PRODUCCION:
+        logging.info("Temperatura: %s°C; Humedad: %s%s" %(ultima_temperatura_medida, ultima_humedad_medida, "%"))
+    else:
+        print("Temperatura: %s°C; Humedad: %s%s" %(ultima_temperatura_medida, ultima_humedad_medida, "%"))
 
     ventana.after(INTERVALO_REGISTRO_LOG, log_temp_y_hum)
     
@@ -224,14 +241,13 @@ def log_temp_y_hum():
 
 
 
-boton_temp = Button(ventana, text ="Confirmar", command = control_termico, activebackground = 'yellow', width = 10 )      #define el botón para confirmar la temp seleccionada
+boton_temp = Button(ventana, text ="Confirmar", command = actualizar_temp_seleccionada, activebackground = 'yellow', width = 10 )      #define el botón para confirmar la temp seleccionada
 boton_temp.grid(row=10,column=COL_TEMP, padx=10, pady=10)                                                                 #define la posición del botón
 
 boton_humedad = Button(ventana, text ="Confirmar", command = control_humedad, activebackground = 'yellow', width = 10 )    #defie el botón para confirmar la humedad seleccionada
 boton_humedad.grid(row=10,column=COL_HUM, padx=10, pady=10)                                                                          #define la posición del botón
 
-leer_sensor_de_temperatura()    # Para que ponga en pantalla la temperatura apenas arranca el programa, después se va refrescando cada 10s....o cuando el sensor quiere
-leer_sensor_de_humedad()        # Para que ponga en pantalla la humedad apenas arranca el programa, después se va refrescando cada 10s....o cuando el sensor quiere
+
 ventana.after(TIEMPO_REFRESCO_LECTURA_TEMPERATURA, control_termico)
 ventana.after(TIEMPO_REFRESCO_LECTURA_HUMEDAD, control_humedad)
 ventana.after(INTERVALO_REGISTRO_LOG, log_temp_y_hum)
