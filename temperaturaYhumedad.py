@@ -15,9 +15,9 @@ HUMEDAD_MAX = 100   # Humedad máxima seteable
 HUMEDAD_MIN = 30    # Humedad mínima seteable
 COL_TEMP = 30       # Para el control de posición de la columna de los controles de temperatura
 COL_HUM = 2         # Ídem para los controles de humedad
-TIEMPO_REFRESCO_LECTURA_HUMEDAD = 10000     # En milisegundos!!
-TIEMPO_REFRESCO_LECTURA_TEMPERATURA = 10000 # En milisegundos!!
-INTERVALO_REGISTRO_LOG = 60000              # En milisegundos!! (cada un minuto)
+TIEMPO_REFRESCO_LECTURA_HUMEDAD = 5000     # En milisegundos!!
+TIEMPO_REFRESCO_LECTURA_TEMPERATURA = 5000 # En milisegundos!!
+INTERVALO_REGISTRO_LOG = 30000              # En milisegundos!! (cada medio minuto)
 
 # DEFINICIÓN DE LOS GPIO
 GPIO.setwarnings(False)
@@ -41,7 +41,7 @@ SENSOR = Adafruit_DHT.DHT11     # crea objeto llamado SENSOR. Es para usar en la
 # DEFINICIONES PARA tkinter
 ventana = Tk()                          # Definiciones de la librería tkinter
 ventana.title("CONTROL DOMÓTICA")       # Título de la ventana
-#ventana.iconbitmap('sate.ico')         # Ícono de la ventana
+#ventana.iconbitmap('rocket.xbm')         # Ícono de la ventana
 ventana.geometry("600x400")            # Define tamaño de pantalla
 #ventana.attributes("-fullscreen", True) # Ventana fullscreen
 humedad_var = DoubleVar()               # variables para el slider (tkinter)
@@ -93,16 +93,18 @@ def control_termico():
     global ultima_temperatura_medida
     temperatura_seleccionada = temp_var.get() 
     temperatura_ambiente = leer_sensor_de_temperatura()
-    
-    if(temperatura_ambiente is not None):                   # Esto se necesita porque el sensor no lee cada vez que se lo interroga. Cuando no lee, responde None
-        ultima_temperatura_medida = temperatura_ambiente    # y eso da problemas al intentar imprimir en la pantalla de tkinter. Para solucionarlo se mantiene guardad
-                                                            # el ultimo valor bueno medido
-    if(temperatura_seleccionada > ultima_temperatura_medida):
-        encender_calefactor() 
-    elif(temperatura_seleccionada == ultima_temperatura_medida):
-        apaga_calefactor_y_ventilador()
-    else:
-        encender_ventilacion()
+# Esto se necesita porque el sensor no lee cada vez que se lo interroga. Cuando no lee, responde None y eso da problemas al intentar imprimir
+# en la pantalla de tkinter. Para solucionarlo se mantiene guardado el ultimo valor bueno medido. Además, actualizamos los registros solo
+# si hay cambios en los valores medidos (por ej, para no recargar el log)
+    if((temperatura_ambiente is not None) and (temperatura_ambiente != ultima_temperatura_medida)):                   
+        ultima_temperatura_medida = temperatura_ambiente    
+                                                            
+        if(temperatura_seleccionada > ultima_temperatura_medida):
+            encender_calefactor() 
+        elif(temperatura_seleccionada == ultima_temperatura_medida):
+            apaga_calefactor_y_ventilador()
+        else:
+            encender_ventilacion()
 
     ventana.after(TIEMPO_REFRESCO_LECTURA_TEMPERATURA, control_termico) # Periódicamente ejecuta la función por si hay que ajustar el control térmico en función de la 
                                                                         # temperatura hambiente y la seleccionada
@@ -143,19 +145,20 @@ def control_humedad():
     global ultima_humedad_medida
     humedad_seleccionada = humedad_var.get() 
     humedad_ambiente = leer_sensor_de_humedad()
-    
-    if(humedad_ambiente is not None):               # Esto se necesita porque el sensor no lee cada vez que se lo interroga. Cuando no lee, responde None
-        ultima_humedad_medida = humedad_ambiente    # y eso da problemas al intentar imprimir en la pantalla de tkinter. Para solucionarlo se mantiene guardad
-                                                    # el ultimo valor bueno medido
-        
-    if(humedad_seleccionada > ultima_humedad_medida):
-        encender_humidificador() 
-    elif(humedad_seleccionada == ultima_humedad_medida):
-        apaga_humidificador_y_deshumidificador()
-    else:
-        encender_deshumidificador()
 
-    ventana.after(TIEMPO_REFRESCO_LECTURA_TEMPERATURA, control_humedad) # Periódicamente ejecuta la función por si hay que ajustar el control térmico en función de la 
+# Esto se necesita porque el sensor no lee cada vez que se lo interroga. Cuando no lee, responde None y eso da problemas al intentar imprimir
+# en la pantalla de tkinter. Para solucionarlo se mantiene guardado el ultimo valor bueno medido. Además, actualizamos los registros solo
+# si hay cambios en los valores medidos (por ej, para no recargar el log)
+    if((humedad_ambiente is not None) and (humedad_ambiente != ultima_humedad_medida)):               
+        ultima_humedad_medida = humedad_ambiente            
+        if(humedad_seleccionada > ultima_humedad_medida):
+            encender_humidificador() 
+        elif(humedad_seleccionada == ultima_humedad_medida):
+            apaga_humidificador_y_deshumidificador()
+        else:
+            encender_deshumidificador()
+
+    ventana.after(TIEMPO_REFRESCO_LECTURA_HUMEDAD, control_humedad) # Periódicamente ejecuta la función por si hay que ajustar el control térmico en función de la 
                                                                         # humedad hambiente y la seleccionada
 
 #Enciende humidificador y apaga deshumidificador
@@ -228,8 +231,8 @@ boton_humedad.grid(row=10,column=COL_HUM, padx=10, pady=10)                     
 
 leer_sensor_de_temperatura()    # Para que ponga en pantalla la temperatura apenas arranca el programa, después se va refrescando cada 10s....o cuando el sensor quiere
 leer_sensor_de_humedad()        # Para que ponga en pantalla la humedad apenas arranca el programa, después se va refrescando cada 10s....o cuando el sensor quiere
-ventana.after(TIEMPO_REFRESCO_LECTURA_TEMPERATURA, leer_sensor_de_temperatura)
-ventana.after(TIEMPO_REFRESCO_LECTURA_HUMEDAD, leer_sensor_de_humedad)
+ventana.after(TIEMPO_REFRESCO_LECTURA_TEMPERATURA, control_termico)
+ventana.after(TIEMPO_REFRESCO_LECTURA_HUMEDAD, control_humedad)
 ventana.after(INTERVALO_REGISTRO_LOG, log_temp_y_hum)
   
 ventana.mainloop() 
