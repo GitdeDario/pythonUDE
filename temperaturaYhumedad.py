@@ -150,7 +150,8 @@ def control_humedad():
 # en la pantalla de tkinter. Para solucionarlo se mantiene guardado el ultimo valor bueno medido. Además, actualizamos los registros solo
 # si hay cambios en los valores medidos (por ej, para no recargar el log)
     if((humedad_ambiente is not None) and (humedad_ambiente != ultima_humedad_medida)):               
-        ultima_humedad_medida = humedad_ambiente            
+        ultima_humedad_medida = humedad_ambiente
+        
         if(humedad_seleccionada > ultima_humedad_medida):
             encender_humidificador() 
         elif(humedad_seleccionada == ultima_humedad_medida):
