@@ -244,7 +244,7 @@ def log_temp_y_hum():
 boton_temp = Button(ventana, text ="Confirmar", command = actualizar_temp_seleccionada, activebackground = 'yellow', width = 10 )      #define el botón para confirmar la temp seleccionada
 boton_temp.grid(row=10,column=COL_TEMP, padx=10, pady=10)                                                                 #define la posición del botón
 
-boton_humedad = Button(ventana, text ="Confirmar", command = control_humedad, activebackground = 'yellow', width = 10 )    #defie el botón para confirmar la humedad seleccionada
+boton_humedad = Button(ventana, text ="Confirmar", command = actualizar_humedad_seleccionada, activebackground = 'yellow', width = 10 )    #defie el botón para confirmar la humedad seleccionada
 boton_humedad.grid(row=10,column=COL_HUM, padx=10, pady=10)                                                                          #define la posición del botón
 
 
