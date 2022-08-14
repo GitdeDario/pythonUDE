@@ -104,6 +104,9 @@ def control_termico():
     else:
         encender_ventilacion()
 
+    ventana.after(TIEMPO_REFRESCO_LECTURA_TEMPERATURA, control_termico) # Periódicamente ejecuta la función por si hay que ajustar el control térmico en función de la 
+                                                                        # temperatura hambiente y la seleccionada
+
 # Enciende calefactor y apaga ventilador
 def encender_calefactor():
     if(PRODUCCION):
@@ -152,6 +155,9 @@ def control_humedad():
     else:
         encender_deshumidificador()
 
+    ventana.after(TIEMPO_REFRESCO_LECTURA_TEMPERATURA, control_humedad) # Periódicamente ejecuta la función por si hay que ajustar el control térmico en función de la 
+                                                                        # humedad hambiente y la seleccionada
+
 #Enciende humidificador y apaga deshumidificador
 def encender_humidificador():
     if(PRODUCCION):
@@ -189,14 +195,14 @@ def leer_sensor_de_temperatura():
     temp_amb = interrogar_sensor_dht()[0]
     if (temp_amb is not None):
         muestra_temp_amb.config(text = str(int(temp_amb)) + "°C")
-    ventana.after(TIEMPO_REFRESCO_LECTURA_TEMPERATURA, leer_sensor_de_temperatura)
+    #ventana.after(TIEMPO_REFRESCO_LECTURA_TEMPERATURA, leer_sensor_de_temperatura)
     return temp_amb
 
 def leer_sensor_de_humedad():
     hume_amb = interrogar_sensor_dht()[1]
     if (hume_amb is not None):
         muestra_humedad_amb.config(text = str(int(hume_amb)) + "%")
-    ventana.after(TIEMPO_REFRESCO_LECTURA_HUMEDAD, leer_sensor_de_humedad)
+    #ventana.after(TIEMPO_REFRESCO_LECTURA_HUMEDAD, leer_sensor_de_humedad)
     return hume_amb
 
 # Registra en el archivo txt los valores de temperatura y humedad 
