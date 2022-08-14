@@ -1,12 +1,51 @@
-2022-08-14 11:12:05,272 [INFO] Inicio del programa.
-2022-08-14 11:12:05,285 [INFO] ========================================================
+2022-08-14 11:20:47,480 [INFO] Inicio del programa.
+2022-08-14 11:20:47,481 [INFO] ========================================================
 
-2022-08-14 11:12:11,872 [INFO] Calefactor apagado y ventilador encendido.
-2022-08-14 11:12:12,401 [INFO] Deshumidificador encendido y humidificador apagado.
-2022-08-14 11:12:36,346 [INFO] Temperatura: 15.0°C; Humedad: 93.0%
-2022-08-14 11:13:06,347 [INFO] Temperatura: 15.0°C; Humedad: 93.0%
-2022-08-14 11:13:36,841 [INFO] Temperatura: 15.0°C; Humedad: 93.0%
-2022-08-14 11:13:52,117 [INFO] Deshumidificador encendido y humidificador apagado.
-2022-08-14 11:14:06,843 [INFO] Temperatura: 15.0°C; Humedad: 91.0%
-2022-08-14 11:14:36,873 [INFO] Temperatura: 15.0°C; Humedad: 91.0%
-2022-08-14 11:14:52,925 [INFO] Deshumidificador encendido y humidificador apagado.
+2022-08-14 11:20:54,066 [INFO] Calefactor apagado y ventilador encendido.
+2022-08-14 11:20:54,594 [INFO] Deshumidificador encendido y humidificador apagado.
+2022-08-14 11:21:18,541 [INFO] Temperatura: 15.0°C; Humedad: 76.0%
+2022-08-14 11:21:24,717 [INFO] Humidificador y deshumidificador apagado.
+2022-08-14 11:21:48,543 [INFO] Temperatura: 15.0°C; Humedad: 75.0%
+2022-08-14 11:21:57,882 [INFO] Humidificador encendido y deshumidificador apagado.
+2022-08-14 11:22:00,939 [INFO] Humidificador y deshumidificador apagado.
+2022-08-14 11:22:06,466 [INFO] Humidificador encendido y deshumidificador apagado.
+2022-08-14 11:22:18,722 [INFO] Temperatura: 15.0°C; Humedad: 74.0%
+2022-08-14 11:22:22,507 [INFO] Calefactor apagado y ventilador encendido.
+2022-08-14 11:22:33,562 [INFO] Calefactor apagado y ventilador encendido.
+2022-08-14 11:22:48,724 [INFO] Temperatura: 15.0°C; Humedad: 74.0%
+2022-08-14 11:22:57,417 [INFO] Humidificador encendido y deshumidificador apagado.
+2022-08-14 11:25:41,987 [INFO] Inicio del programa.
+2022-08-14 11:25:41,987 [INFO] ========================================================
+
+2022-08-14 11:25:48,574 [INFO] Calefactor apagado y ventilador encendido.
+2022-08-14 11:25:49,102 [INFO] Deshumidificador encendido y humidificador apagado.
+2022-08-14 11:26:01,902 [INFO] Humidificador y deshumidificador apagado.
+2022-08-14 11:26:13,048 [INFO] Temperatura: 15.0°C; Humedad: 70.0%
+2022-08-14 11:26:18,484 [INFO] Deshumidificador encendido y humidificador apagado.
+2022-08-14 11:26:26,927 [INFO] Deshumidificador encendido y humidificador apagado.
+2022-08-14 11:26:28,509 [INFO] Deshumidificador encendido y humidificador apagado.
+2022-08-14 11:26:45,419 [INFO] Temperatura: 15.0°C; Humedad: 69.0%
+2022-08-14 11:27:00,627 [INFO] Calefactor encendido y ventilador apagado.
+2022-08-14 11:27:01,167 [INFO] Calefactor apagado y ventilador encendido.
+2022-08-14 11:27:15,421 [INFO] Temperatura: 16.0°C; Humedad: 69.0%
+2022-08-14 11:27:23,275 [INFO] Calefactor apagado y ventilador encendido.
+2022-08-14 11:27:23,808 [INFO] Humidificador y deshumidificador apagado.
+2022-08-14 11:27:25,336 [INFO] Deshumidificador encendido y humidificador apagado.
+2022-08-14 11:27:30,864 [INFO] Humidificador y deshumidificador apagado.
+2022-08-14 11:27:33,261 [INFO] Deshumidificador encendido y humidificador apagado.
+2022-08-14 11:27:34,331 [INFO] Calefactor apagado y ventilador encendido.
+2022-08-14 11:27:40,395 [INFO] Humidificador y deshumidificador apagado.
+2022-08-14 11:27:44,319 [INFO] Deshumidificador encendido y humidificador apagado.
+2022-08-14 11:27:45,924 [INFO] Temperatura: 16.0°C; Humedad: 69.0%
+2022-08-14 11:27:47,447 [INFO] Humidificador y deshumidificador apagado.
+2022-08-14 11:27:56,442 [INFO] Calefactor apagado y ventilador encendido.
+2022-08-14 11:28:09,557 [INFO] Deshumidificador encendido y humidificador apagado.
+2022-08-14 11:28:11,955 [INFO] Humidificador y deshumidificador apagado.
+2022-08-14 11:28:13,025 [INFO] Calefactor apagado y ventilador encendido.
+2022-08-14 11:28:15,926 [INFO] Temperatura: 16.0°C; Humedad: 68.0%
+2022-08-14 11:28:46,187 [INFO] Temperatura: 16.0°C; Humedad: 68.0%
+2022-08-14 11:29:07,762 [INFO] Calefactor apagado y ventilador encendido.
+2022-08-14 11:29:16,189 [INFO] Temperatura: 15.0°C; Humedad: 68.0%
+2022-08-14 11:29:24,878 [INFO] Calefactor apagado y ventilador encendido.
+2022-08-14 11:29:35,400 [INFO] Calefactor apagado y ventilador encendido.
+2022-08-14 11:29:35,934 [INFO] Calefactor apagado y ventilador encendido.
