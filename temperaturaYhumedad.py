@@ -16,9 +16,12 @@ HUMEDAD_MAX = 100   # Humedad máxima seteable
 HUMEDAD_MIN = 30    # Humedad mínima seteable
 COL_TEMP = 30       # Para el control de posición de la columna de los controles de temperatura
 COL_HUM = 2         # Ídem para los controles de humedad
-TIEMPO_REFRESCO_LECTURA_HUMEDAD = 30000     # En milisegundos!!
-TIEMPO_REFRESCO_LECTURA_TEMPERATURA = 30000 # En milisegundos!!
+TIEMPO_REFRESCO_LECTURA_HUMEDAD = 10000     # En milisegundos!!
+TIEMPO_REFRESCO_LECTURA_TEMPERATURA = 10000 # En milisegundos!!
 INTERVALO_REGISTRO_LOG = 60000              # En milisegundos!! (cada medio minuto)
+DIR_DONDE_GUARDO_LOS_LOGS = "/home/pi/pythonUDE/"
+EDITOR_DE_TEXTOS  = "geany"
+
 
 # DEFINICIÓN DE LOS GPIO
 GPIO.setwarnings(False)
@@ -87,8 +90,18 @@ logging.info('==================================================================
 #****                                                        FUNCIONES                                               ****
 #************************************************************************************************************************
 
+""" Esta función hace:
+    1) se para en el directorio donde está el archivo con los logs
+    2) hace una copia del archivo porque no se puede abrir un archivo que esté en uso
+    3) le otorga permisos de lectura a ese archivo copiado
+    4) abre el archivo usando el editor seleccionado
+    """
 def abrir_archivo_logs():
-    os.system("logTemperatura_Humedad.txt")
+    os.system("cd " + DIR_DONDE_GUARDO_LOS_LOGS)
+    os.system("sudo cp logTemperatura_Humedad.txt copiaLogTemperatura_Humedad.txt")
+    os.system("sudo chmod 100 copiaLogTemperatura_Humedad.txt")
+    os.system(EDITOR_DE_TEXTOS +" "+ DIR_DONDE_GUARDO_LOS_LOGS + "copiaLogTemperatura_Humedad.txt")
+    
 def actualizar_temp_seleccionada():
     global temperatura_seleccionada
     temperatura_seleccionada = temp_var.get()
