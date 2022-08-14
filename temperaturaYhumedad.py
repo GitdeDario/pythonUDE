@@ -188,14 +188,14 @@ def interrogar_sensor_dht():
 def leer_sensor_de_temperatura():
     temp_amb = interrogar_sensor_dht()[0]
     if (temp_amb is not None):
-        muestra_temp_amb.config(text = str(temp_amb) + "°C")
+        muestra_temp_amb.config(text = str(int(temp_amb)) + "°C")
     ventana.after(TIEMPO_REFRESCO_LECTURA_TEMPERATURA, leer_sensor_de_temperatura)
     return temp_amb
 
 def leer_sensor_de_humedad():
     hume_amb = interrogar_sensor_dht()[1]
     if (hume_amb is not None):
-        muestra_humedad_amb.config(text = str(hume_amb) + "%")
+        muestra_humedad_amb.config(text = str(int(hume_amb)) + "%")
     ventana.after(TIEMPO_REFRESCO_LECTURA_HUMEDAD, leer_sensor_de_humedad)
     return hume_amb
 
