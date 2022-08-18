@@ -92,6 +92,10 @@ cuadro_de_texto_temp_umbral = Entry(ventana, textvariable = nueva_temp_umbral)
 cuadro_de_texto_temp_umbral.grid(column=1, row=0, padx=5, pady=5)
 cuadro_de_texto_temp_umbral.focus()
 
+# tkinter - alarma
+muestra_alarma = Label(ventana, font=("Arial",20), fg = "red")
+muestra_alarma.grid(row = 3, column = COL_TEMP, padx = 10, pady = 10, sticky = "nsew")
+
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s",handlers=[logging.FileHandler("logTemperatura_Humedad.txt"),])
 logging.info('===================================================================================================================\n')
 logging.info('                              I              Inicio del programa.')
@@ -288,7 +292,7 @@ def alarma_por_temperatura():
     global flag_alarma_temp
     if (ultima_temperatura_medida > temp_umbral and not flag_alarma_temp):
         flag_alarma_temp = True
-        print("ALARMA")
+        muestra_alarma.config(text = "ALARMA TEMPERATURA")
         enviar_correo()
     
     ventana.after(TIEMPO_REFRESCO_LECTURA_TEMPERATURA, alarma_por_temperatura)
