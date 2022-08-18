@@ -285,9 +285,13 @@ def reset_alarma():
     flag_alarma_temp = False
 
 def alarma_por_temperatura():
+    global flag_alarma_temp
     if (ultima_temperatura_medida > temp_umbral and not flag_alarma_temp):
         flag_alarma_temp = True
+        print("ALARMA")
         enviar_correo()
+    
+    ventana.after(TIEMPO_REFRESCO_LECTURA_TEMPERATURA, alarma_por_temperatura)
 #************************************************************************************************************************
 #****                                          FIN DEFINICION FUNCIONES                                              ****
 #************************************************************************************************************************
@@ -311,6 +315,7 @@ boton_reset_alarma.grid(row=10,column=COL_HUM+10+10+10, padx=10, pady=10)
 
 ventana.after(TIEMPO_REFRESCO_LECTURA_TEMPERATURA, control_termico)
 ventana.after(TIEMPO_REFRESCO_LECTURA_HUMEDAD, control_humedad)
+ventana.after(TIEMPO_REFRESCO_LECTURA_TEMPERATURA, alarma_por_temperatura)
 ventana.after(INTERVALO_REGISTRO_LOG, log_temp_y_hum)
   
 ventana.mainloop() 
