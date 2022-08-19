@@ -87,19 +87,25 @@ ctrl_humedad.set(65)
 
 # tkinter - umbral de temperatura
 etiqueta_umbral_alarma_tem = Label(ventana, text='Umbral de temp. para alarma')
-etiqueta_umbral_alarma_tem.grid(column = COL_ALARMAS, row = 0, sticky = 'W', padx = 10, pady = 10)
+etiqueta_umbral_alarma_tem.grid(column = COL_ALARMAS, row = 8, sticky = 'W', padx = 10, pady = 10)
 cuadro_de_texto_temp_umbral = Entry(ventana, textvariable = nueva_temp_umbral)
-cuadro_de_texto_temp_umbral.grid(column = COL_ALARMAS, row = 0, padx = 10, pady = 10)
+cuadro_de_texto_temp_umbral.grid(column = COL_ALARMAS, row = 9, padx = 10, pady = 10)
+nueva_temp_umbral.set(str(TEMP_MAX))
 cuadro_de_texto_temp_umbral.focus()
 
 # tkinter - alarma
+etiqueta_alarmas = Label(ventana, text="Control de Alarmas", font=("Arial",15))
+etiqueta_alarmas.grid(row = 2, column = COL_ALARMAS, padx = 10, pady = 10, sticky = "nsew")
 muestra_alarma = Label(ventana, font=("Arial",20), fg = "red")
-muestra_alarma.grid(row = 3, column = COL_ALARMAS, padx = 10, pady = 10, sticky = "nsew")
+muestra_alarma.grid(row = 13, column = COL_ALARMAS, padx = 10, pady = 10, sticky = "nsew")
 
+# Cabezal del archivo LOG
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s",handlers=[logging.FileHandler("logTemperatura_Humedad.txt"),])
 logging.info('===================================================================================================================\n')
 logging.info('                              I              Inicio del programa.')
 logging.info('===================================================================================================================\n')
+
+
 #************************************************************************************************************************
 #****                                                        FUNCIONES                                               ****
 #************************************************************************************************************************
@@ -315,7 +321,7 @@ boton_log.grid(row=10,column = COL_ALARMAS, padx = 10, pady = 10)
 boton_set_temp_alarma = Button(ventana, text ="UMBRAL ALARMA", command = set_umbral_alarma, activebackground = 'yellow', width = 10 )    #defie el botón para confirmar la temperatura umbral para disparar la alaram
 boton_set_temp_alarma.grid(row=10,column = COL_ALARMAS, padx = 10, pady = 10)
 
-boton_reset_alarma = Button(ventana, text ="RESET ALARMA", command = reset_alarma, activebackground = 'yellow', width = 10 )    #resetea la alaram
+boton_reset_alarma = Button(ventana, text ="RESET\n ALARMA", command = reset_alarma, activebackground = 'yellow', width = 10 )    #resetea la alaram
 boton_reset_alarma.grid(row=10,column = COL_ALARMAS, padx = 10, pady = 10)
 
 ventana.after(TIEMPO_REFRESCO_LECTURA_TEMPERATURA, control_termico)
