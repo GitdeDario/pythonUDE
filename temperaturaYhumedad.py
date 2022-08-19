@@ -3,14 +3,14 @@
 #**************************************************
 PRODUCCION = True    
 
-from threading import currentThread
+#from threading import currentThread
 import RPi.GPIO as GPIO # para el control de los GPIO de la raspberry
 import Adafruit_DHT     # librería para el sensor de presión y temperatura
 from tkinter import *   # librería para entorno gráfico
 import logging          # para generar los log en un archivo txt    
 import os               # para poder ejecutar comandos. En particular se usa para abrir el archivo de logs
-from email.message import EmailMessage 
-import smtplib
+from email.message import EmailMessage    # librería para enviar correos
+import smtplib                            # librería que trabaja en conjunto con la anterior para gestión de protocolo smtp
 
 # CONSTANTES
 TEMP_MIN = 10       # Temperatura mínima que se puede elegir
@@ -19,15 +19,15 @@ HUMEDAD_MAX = 100   # Humedad máxima seteable
 HUMEDAD_MIN = 30    # Humedad mínima seteable
 COL_TEMP = 30       # Para el control de posición de la columna de los controles de temperatura
 COL_HUM = 2         # Ídem para los controles de humedad
+COL_ALARMAS = 62    # Ídem para la parte de las alarmas y log
 TIEMPO_REFRESCO_LECTURA_HUMEDAD = 10000     # En milisegundos!!
 TIEMPO_REFRESCO_LECTURA_TEMPERATURA = 10000 # En milisegundos!!
 INTERVALO_REGISTRO_LOG = 60000              # En milisegundos!! (cada medio minuto)
 DIR_DONDE_GUARDO_LOS_LOGS = "/home/pi/pythonUDE/"
 EDITOR_DE_TEXTOS  = "geany"
-TEMPERATURA_ALARMA_CORREO = TEMP_MAX
-REMITENTE = "pruebascosasmias@gmail.com"
+REMITENTE = "pruebascosasmias@gmail.com"    # dir desde donde se envían los correos
 CONTRASENIA = "xavnmqrxqzicoexf"
-DESTINATARIOS = ["dariososasocias@gmail.com", "mail@gmail.com"]
+DESTINATARIOS = ["dariososasocias@gmail.com", "dariogss@gmail.com"]
 
 # DEFINICIÓN DE LOS GPIO
 GPIO.setwarnings(False)
@@ -53,10 +53,10 @@ ventana = Tk()                          # Definiciones de la librería tkinter
 ventana.title("CONTROL DOMÓTICA")       # Título de la ventana
 ventana.geometry("600x400")             # Define tamaño de pantalla
 humedad_var = DoubleVar()               # variables para el slider (tkinter)
-temp_var = DoubleVar()  
-nueva_temp_umbral = StringVar()               # para definir la temp umbral de alarma
-temp_umbral = TEMP_MAX
-flag_alarma_temp = False
+temp_var = DoubleVar()                  # variable para el cuadro de texto de la alarma de temperatura
+nueva_temp_umbral = StringVar()         # para definir la temp umbral de alarma
+temp_umbral = TEMP_MAX                  # inicialmente el umbral de temperatura que dispara la alarma es la tem máxima, así no hay disparos
+flag_alarma_temp = False                # flag para disparar el envío de correos solo una vez (la primera que se supera el umbral) 
 
 
 # tkinter - humedad medida por el sensor
@@ -80,21 +80,21 @@ ctrl_temp.set(25)
 
 # tkinter - slider/selector de humedad
 etiqueta_humedad = Label(ventana, text = "Selector Humedad %")                             #define la etiqueta "Humidity Selector"
-etiqueta_humedad.grid(row=8,column=COL_HUM, padx=10, pady=10)                  #define la posición de la etiqueta
+etiqueta_humedad.grid(row = 8,column = COL_HUM, padx = 10, pady = 10)                  #define la posición de la etiqueta
 ctrl_humedad = Scale(ventana, variable = humedad_var, from_ = HUMEDAD_MAX , to = HUMEDAD_MIN, orient = VERTICAL, activebackground='green2', bd=5,)  #Define el slider de control de humedad
-ctrl_humedad.grid(row=9,column=COL_HUM, padx=10, pady=10)                                                   #define su posición
+ctrl_humedad.grid(row = 9,column = COL_HUM, padx = 10, pady = 10)                                                   #define su posición
 ctrl_humedad.set(65)
 
 # tkinter - umbral de temperatura
 etiqueta_umbral_alarma_tem = Label(ventana, text='Umbral de temp. para alarma')
-etiqueta_umbral_alarma_tem.grid(column=0, row=0, sticky='W', padx= 5, pady= 5)
+etiqueta_umbral_alarma_tem.grid(column = COL_ALARMAS, row = 0, sticky = 'W', padx = 10, pady = 10)
 cuadro_de_texto_temp_umbral = Entry(ventana, textvariable = nueva_temp_umbral)
-cuadro_de_texto_temp_umbral.grid(column=1, row=0, padx=5, pady=5)
+cuadro_de_texto_temp_umbral.grid(column = COL_ALARMAS, row = 0, padx = 10, pady = 10)
 cuadro_de_texto_temp_umbral.focus()
 
 # tkinter - alarma
 muestra_alarma = Label(ventana, font=("Arial",20), fg = "red")
-muestra_alarma.grid(row = 3, column = COL_TEMP+30, padx = 10, pady = 10, sticky = "nsew")
+muestra_alarma.grid(row = 3, column = COL_ALARMAS, padx = 10, pady = 10, sticky = "nsew")
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s",handlers=[logging.FileHandler("logTemperatura_Humedad.txt"),])
 logging.info('===================================================================================================================\n')
@@ -269,7 +269,7 @@ def enviar_correo():
     for destinatario in DESTINATARIOS:
         remitente = REMITENTE
         destinatario = destinatario
-        mensaje = "¡Prueba 4 python Dario!"
+        mensaje = "¡Prueba de alarma por temperatura 01!"
         email = EmailMessage()
         email["From"] = remitente
         email["To"] = destinatario
@@ -304,19 +304,19 @@ def alarma_por_temperatura():
 
 
 boton_temp = Button(ventana, text ="Confirmar", command = actualizar_temp_seleccionada, activebackground = 'yellow', width = 10 )      #define el botón para confirmar la temp seleccionada
-boton_temp.grid(row=10,column=COL_TEMP, padx=10, pady=10)                                                                 #define la posición del botón
+boton_temp.grid(row=10,column=COL_TEMP, padx = 10, pady = 10)                                                                 #define la posición del botón
 
 boton_humedad = Button(ventana, text ="Confirmar", command = actualizar_humedad_seleccionada, activebackground = 'yellow', width = 10 )    #defie el botón para confirmar la humedad seleccionada
-boton_humedad.grid(row=10,column=COL_HUM, padx=10, pady=10)                                                                          #define la posición del botón
+boton_humedad.grid(row=10,column=COL_HUM, padx = 10, pady = 10)                                                                          #define la posición del botón
 
 boton_log = Button(ventana, text ="Consultar LOG", command = abrir_archivo_logs, activebackground = 'yellow', width = 10 )    #defie el botón para confirmar la humedad seleccionada
-boton_log.grid(row=10,column=COL_HUM+10, padx=10, pady=10)
+boton_log.grid(row=10,column = COL_ALARMAS, padx = 10, pady = 10)
 
 boton_set_temp_alarma = Button(ventana, text ="UMBRAL ALARMA", command = set_umbral_alarma, activebackground = 'yellow', width = 10 )    #defie el botón para confirmar la temperatura umbral para disparar la alaram
-boton_set_temp_alarma.grid(row=10,column=COL_HUM+10+10, padx=10, pady=10)
+boton_set_temp_alarma.grid(row=10,column = COL_ALARMAS, padx = 10, pady = 10)
 
 boton_reset_alarma = Button(ventana, text ="RESET ALARMA", command = reset_alarma, activebackground = 'yellow', width = 10 )    #resetea la alaram
-boton_reset_alarma.grid(row=10,column=COL_HUM+10+10+10, padx=10, pady=10)
+boton_reset_alarma.grid(row=10,column = COL_ALARMAS, padx = 10, pady = 10)
 
 ventana.after(TIEMPO_REFRESCO_LECTURA_TEMPERATURA, control_termico)
 ventana.after(TIEMPO_REFRESCO_LECTURA_HUMEDAD, control_humedad)
