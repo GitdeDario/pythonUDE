@@ -45,8 +45,8 @@ DESHUMIDIFICADOR = 5                    # El led que representa el deshumidifica
 GPIO.setup(DESHUMIDIFICADOR, GPIO.OUT)  # Se setea el pin correspondiente como salida ya que va a controlar un actuador
 GPIO.output(DESHUMIDIFICADOR, False)    # El humidificador inicia apagado cuando arranca el sistema
                       
-PIN_SENSOR = 4                  # pin de lectura del sensor DHT11        
-SENSOR = Adafruit_DHT.DHT11     # crea objeto llamado SENSOR. Es para usar en la lectura del DHT11
+PIN_SENSOR = 4                          # pin de lectura del sensor DHT11        
+SENSOR = Adafruit_DHT.DHT11             # crea objeto llamado SENSOR. Es para usar en la lectura del DHT11
 
 # DEFINICIONES PARA tkinter
 ventana = Tk()                          # Definiciones de la librería tkinter
@@ -72,17 +72,17 @@ muestra_temp_amb = Label(ventana, font=("Arial",20), fg = "red")
 muestra_temp_amb.grid(row = 3, column = COL_TEMP, padx = 10, pady = 10, sticky = "nsew")
 
 # tkinter - slider/selector de temperatura
-etiqueta_temp = Label(ventana, text = "Selector Temperatura °C")   #define la etiqueta "Temperatura"
-etiqueta_temp.grid(row=8,column=COL_TEMP, padx=10, pady=10)             #define la posición de la etiqueta
-ctrl_temp = Scale(ventana, variable = temp_var, from_ = TEMP_MAX, to = TEMP_MIN, orient = VERTICAL, activebackground='green2', bd=5,)  #Define el slider de control de temp
-ctrl_temp.grid(row=9,column=COL_TEMP, padx=10, pady=10)                                                                  #define su posición
+etiqueta_temp = Label(ventana, text = "Selector Temperatura °C")        # Define la etiqueta "Temperatura"
+etiqueta_temp.grid(row=8,column=COL_TEMP, padx=10, pady=10)             # Define la posición de la etiqueta
+ctrl_temp = Scale(ventana, variable = temp_var, from_ = TEMP_MAX, to = TEMP_MIN, orient = VERTICAL, activebackground='green2', bd=5,)  # Define el slider de control de temp
+ctrl_temp.grid(row=9,column=COL_TEMP, padx=10, pady=10)                                                                                # Define su posición
 ctrl_temp.set(25)
 
 # tkinter - slider/selector de humedad
-etiqueta_humedad = Label(ventana, text = "Selector Humedad %")                             #define la etiqueta "Humidity Selector"
-etiqueta_humedad.grid(row = 8,column = COL_HUM, padx = 10, pady = 10)                  #define la posición de la etiqueta
+etiqueta_humedad = Label(ventana, text = "Selector Humedad %")                         # Define la etiqueta "Humidity Selector"
+etiqueta_humedad.grid(row = 8,column = COL_HUM, padx = 10, pady = 10)                  # Define la posición de la etiqueta
 ctrl_humedad = Scale(ventana, variable = humedad_var, from_ = HUMEDAD_MAX , to = HUMEDAD_MIN, orient = VERTICAL, activebackground='green2', bd=5,)  #Define el slider de control de humedad
-ctrl_humedad.grid(row = 9,column = COL_HUM, padx = 10, pady = 10)                                                   #define su posición
+ctrl_humedad.grid(row = 9,column = COL_HUM, padx = 10, pady = 10)                      #define su posición
 ctrl_humedad.set(65)
 
 # tkinter - umbral de temperatura
@@ -99,7 +99,7 @@ etiqueta_alarmas.grid(row = 2, column = COL_ALARMAS, padx = 10, pady = 10, stick
 muestra_alarma = Label(ventana, font=("Arial",25), fg = "red")
 muestra_alarma.grid(row = 9, column = COL_ALARMAS+3, padx = 10, pady = 10, sticky = "nsew")
 
-# Cabezal del archivo LOG
+# Configuración y cabezal del archivo LOG
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s",handlers=[logging.FileHandler("logTemperatura_Humedad.txt"),])
 logging.info('===================================================================================================================\n')
 logging.info('                              I              Inicio del programa.')
@@ -113,9 +113,9 @@ logging.info('==================================================================
 """ Esta función hace:
     1) se para en el directorio donde está el archivo con los logs
     2) hace una copia del archivo porque no se puede abrir un archivo que esté en uso
-    3) le otorga permisos de lectura a ese archivo copiado
+    3) le otorga permisos a ese archivo copiado
     4) abre el archivo usando el editor seleccionado
-    """
+"""
 def abrir_archivo_logs():
     os.system("cd " + DIR_DONDE_GUARDO_LOS_LOGS)
     os.system("sudo cp logTemperatura_Humedad.txt copiaLogTemperatura_Humedad.txt")
@@ -211,7 +211,7 @@ def control_humedad():
         encender_deshumidificador()
 
     ventana.after(TIEMPO_REFRESCO_LECTURA_HUMEDAD, control_humedad) # Periódicamente ejecuta la función por si hay que ajustar el control térmico en función de la 
-                                                                        # humedad hambiente y la seleccionada
+                                                                    # humedad hambiente y la seleccionada
 
 #Enciende humidificador y apaga deshumidificador
 def encender_humidificador():
@@ -270,32 +270,36 @@ def log_temp_y_hum():
         print("Temperatura: %s°C; Humedad: %s%s" %(ultima_temperatura_medida, ultima_humedad_medida, "%"))
 
     ventana.after(INTERVALO_REGISTRO_LOG, log_temp_y_hum)
-    
+
+#Esta función envía correos a los destinatarios que estén en la lista (ver en la sección "CONSTANTES") desde el correo que aparece en "remitente" (también en esa sección)    
 def enviar_correo():
     for destinatario in DESTINATARIOS:
         remitente = REMITENTE
         destinatario = destinatario
-        mensaje = "¡Prueba de alarma por temperatura 01!"
+        mensaje = "ALARMA POR EXCESO DE TEMPERATURA"
         email = EmailMessage()
         email["From"] = remitente
         email["To"] = destinatario
-        email["Subject"] = "Correo de prueba"
+        email["Subject"] = "Alarma en raspberry"
         email.set_content(mensaje)
         smtp = smtplib.SMTP_SSL("smtp.gmail.com")
         smtp.login(remitente, "xavnmqrxqzicoexf")
         smtp.sendmail(remitente, destinatario, email.as_string())
         smtp.quit()
 
+# Setea la temperatura a parit de la cual, si se registra una superior, se dispara una alarma
 def set_umbral_alarma():
     global temp_umbral
     temp_umbral = int(nueva_temp_umbral.get())
     reset_alarma()
 
+# Borra el texto que avisa que hay alarma y también baja la bandera que avisa que hay alarma
 def reset_alarma():
     global flag_alarma_temp
     flag_alarma_temp = False
     muestra_alarma.config(text = "")
 
+# Dispara la alarma si se cumplen las condiciones, levanta la bandera para que no se envíen corresos constantemente, pone el texto de alarma y también registra el log
 def alarma_por_temperatura():
     global flag_alarma_temp
     if (ultima_temperatura_medida > temp_umbral and not flag_alarma_temp):
@@ -309,13 +313,11 @@ def alarma_por_temperatura():
 #****                                          FIN DEFINICION FUNCIONES                                              ****
 #************************************************************************************************************************
 
-
-
 boton_temp = Button(ventana, text ="Confirmar", command = actualizar_temp_seleccionada, activebackground = 'yellow', width = 10 )      #define el botón para confirmar la temp seleccionada
-boton_temp.grid(row=10,column=COL_TEMP, padx = 10, pady = 10)                                                                 #define la posición del botón
+boton_temp.grid(row=10,column=COL_TEMP, padx = 10, pady = 10)                                                                          #define la posición del botón
 
 boton_humedad = Button(ventana, text ="Confirmar", command = actualizar_humedad_seleccionada, activebackground = 'yellow', width = 10 )    #defie el botón para confirmar la humedad seleccionada
-boton_humedad.grid(row=10,column=COL_HUM, padx = 10, pady = 10)                                                                          #define la posición del botón
+boton_humedad.grid(row=10,column=COL_HUM, padx = 10, pady = 10)                                                                            #define la posición del botón
 
 boton_log = Button(ventana, text ="Consultar LOG", command = abrir_archivo_logs, activebackground = 'yellow', width = 10 )    #defie el botón para confirmar la humedad seleccionada
 boton_log.grid(row=10,column = COL_ALARMAS, padx = 10, pady = 10)
