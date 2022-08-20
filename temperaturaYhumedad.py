@@ -51,7 +51,7 @@ SENSOR = Adafruit_DHT.DHT11     # crea objeto llamado SENSOR. Es para usar en la
 # DEFINICIONES PARA tkinter
 ventana = Tk()                          # Definiciones de la librería tkinter
 ventana.title("CONTROL DOMÓTICA")       # Título de la ventana
-ventana.geometry("850x400")             # Define tamaño de pantalla
+ventana.geometry("800x400")             # Define tamaño de pantalla
 humedad_var = DoubleVar()               # variables para el slider (tkinter)
 temp_var = DoubleVar()                  # variable para el cuadro de texto de la alarma de temperatura
 nueva_temp_umbral = StringVar()         # para definir la temp umbral de alarma
@@ -88,7 +88,7 @@ ctrl_humedad.set(65)
 # tkinter - umbral de temperatura
 etiqueta_umbral_alarma_tem = Label(ventana, text='Umbral de temp. para alarma')
 etiqueta_umbral_alarma_tem.grid(column = COL_ALARMAS, row = 8, sticky = 'W', padx = 10, pady = 10)
-cuadro_de_texto_temp_umbral = Entry(ventana, textvariable = nueva_temp_umbral)
+cuadro_de_texto_temp_umbral = Entry(ventana, textvariable = nueva_temp_umbral, width = 4, justify = "center")
 cuadro_de_texto_temp_umbral.grid(column = COL_ALARMAS, row = 9, padx = 10, pady = 10)
 nueva_temp_umbral.set(str(TEMP_MAX))
 cuadro_de_texto_temp_umbral.focus()
@@ -97,7 +97,7 @@ cuadro_de_texto_temp_umbral.focus()
 etiqueta_alarmas = Label(ventana, text="Control de Alarmas", font=("Arial",15))
 etiqueta_alarmas.grid(row = 2, column = COL_ALARMAS, padx = 10, pady = 10, sticky = "nsew")
 muestra_alarma = Label(ventana, font=("Arial",25), fg = "red")
-muestra_alarma.grid(row = 9, column = COL_ALARMAS+1, padx = 10, pady = 10, sticky = "nsew")
+muestra_alarma.grid(row = 9, column = COL_ALARMAS+3, padx = 10, pady = 10, sticky = "nsew")
 
 # Cabezal del archivo LOG
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s",handlers=[logging.FileHandler("logTemperatura_Humedad.txt"),])
@@ -119,7 +119,7 @@ logging.info('==================================================================
 def abrir_archivo_logs():
     os.system("cd " + DIR_DONDE_GUARDO_LOS_LOGS)
     os.system("sudo cp logTemperatura_Humedad.txt copiaLogTemperatura_Humedad.txt")
-    os.system("sudo chmod 100 copiaLogTemperatura_Humedad.txt")
+    os.system("sudo chmod 777 copiaLogTemperatura_Humedad.txt")
     os.system(EDITOR_DE_TEXTOS +" "+ DIR_DONDE_GUARDO_LOS_LOGS + "copiaLogTemperatura_Humedad.txt")
     
 def actualizar_temp_seleccionada():
@@ -289,6 +289,7 @@ def enviar_correo():
 def set_umbral_alarma():
     global temp_umbral
     temp_umbral = int(nueva_temp_umbral.get())
+    reset_alarma()
 
 def reset_alarma():
     global flag_alarma_temp
@@ -322,12 +323,15 @@ boton_log.grid(row=10,column = COL_ALARMAS, padx = 10, pady = 10)
 boton_set_temp_alarma = Button(ventana, text ="UMBRAL\n ALARMA", command = set_umbral_alarma, activebackground = 'yellow', width = 10 )    #defie el botón para confirmar la temperatura umbral para disparar la alaram
 boton_set_temp_alarma.grid(row=10,column = COL_ALARMAS+1, padx = 10, pady = 10)
 
-boton_reset_alarma = Button(ventana, text ="RESET\n ALARMA", command = reset_alarma, activebackground = 'yellow', width = 10 )    #resetea la alaram
-boton_reset_alarma.grid(row=10,column = COL_ALARMAS+2, padx = 10, pady = 10)
 
 ventana.after(TIEMPO_REFRESCO_LECTURA_TEMPERATURA, control_termico)
 ventana.after(TIEMPO_REFRESCO_LECTURA_HUMEDAD, control_humedad)
 ventana.after(TIEMPO_REFRESCO_LECTURA_TEMPERATURA, alarma_por_temperatura)
 ventana.after(INTERVALO_REGISTRO_LOG, log_temp_y_hum)
-  
+ 
+ 
+ 
+#***************************************************************************************************************************
+#                                                               MAINLOOP
+#***************************************************************************************************************************
 ventana.mainloop() 
