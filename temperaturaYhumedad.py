@@ -11,6 +11,7 @@ import logging          # para generar los log en un archivo txt
 import os               # para poder ejecutar comandos. En particular se usa para abrir el archivo de logs
 from email.message import EmailMessage    # librería para enviar correos
 import smtplib                            # librería que trabaja en conjunto con la anterior para gestión de protocolo smtp
+import pywhatkit
 
 # CONSTANTES
 TEMP_MIN = 10       # Temperatura mínima que se puede elegir
@@ -27,7 +28,7 @@ DIR_DONDE_GUARDO_LOS_LOGS = "/home/pi/pythonUDE/"
 EDITOR_DE_TEXTOS  = "geany"
 REMITENTE = "pruebascosasmias@gmail.com"    # dir desde donde se envían los correos
 CONTRASENIA = "xavnmqrxqzicoexf"
-DESTINATARIOS = ["dariososasocias@gmail.com", "dariogss@gmail.com"]
+DESTINATARIOS = ["dariososasocias@gmail.com", "moreirafabian890@gmail.com", "queesloquepuedepasar@gmail.com"]
 
 # DEFINICIÓN DE LOS GPIO
 GPIO.setwarnings(False)
@@ -287,6 +288,9 @@ def enviar_correo():
         smtp.sendmail(remitente, destinatario, email.as_string())
         smtp.quit()
 
+def enviar_whatsapp():
+    pywhatkit.sendwhatmsg_instantly("+59898784063", "Hola")
+
 # Setea la temperatura a parit de la cual, si se registra una superior, se dispara una alarma
 def set_umbral_alarma():
     global temp_umbral
@@ -306,6 +310,7 @@ def alarma_por_temperatura():
         flag_alarma_temp = True
         muestra_alarma.config(text = "ALARMA")
         enviar_correo()
+        enviar_whatsapp()
         logging.info("SE REGISTRÓ UNA ALARMA POR ALTA TEMPERATURA.Temperatura: %s°C; Umbral: %s°C" %(ultima_temperatura_medida, temp_umbral))
     
     ventana.after(TIEMPO_REFRESCO_LECTURA_TEMPERATURA, alarma_por_temperatura)
