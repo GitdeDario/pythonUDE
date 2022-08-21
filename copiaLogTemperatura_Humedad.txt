@@ -1,0 +1,98 @@
+2022-08-21 08:30:46,130 [INFO] ===================================================================================================================
+
+2022-08-21 08:30:46,131 [INFO]                               I              Inicio del programa.
+2022-08-21 08:30:46,132 [INFO] ===================================================================================================================
+
+2022-08-21 08:30:56,666 [INFO] Temperatura: 12°C; Humedad: 65%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:30:57,196 [INFO] Temperatura: 12°C; Humedad: 65%. Humedad seleccionada: 65°C. Humidificador apagado y deshumidificador apagado
+2022-08-21 08:31:07,193 [INFO] Temperatura: 13°C; Humedad: 65%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:31:07,724 [INFO] Temperatura: 13°C; Humedad: 65%. Humedad seleccionada: 65°C. Humidificador apagado y deshumidificador apagado
+2022-08-21 08:31:17,721 [INFO] Temperatura: 13°C; Humedad: 65%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:31:18,253 [INFO] Temperatura: 13°C; Humedad: 65%. Humedad seleccionada: 65°C. Humidificador apagado y deshumidificador apagado
+2022-08-21 08:31:28,250 [INFO] Temperatura: 13°C; Humedad: 65%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:31:28,781 [INFO] Temperatura: 13°C; Humedad: 53%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:31:38,776 [INFO] Temperatura: 13°C; Humedad: 53%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:31:39,308 [INFO] Temperatura: 13°C; Humedad: 53%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:31:46,137 [INFO] Temperatura: 13°C; Humedad: 53%
+2022-08-21 08:31:49,303 [INFO] Temperatura: 13°C; Humedad: 53%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:31:49,835 [INFO] Temperatura: 13°C; Humedad: 53%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:31:59,831 [INFO] Temperatura: 13°C; Humedad: 53%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:32:00,362 [INFO] Temperatura: 13°C; Humedad: 53%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:32:10,359 [INFO] Temperatura: 13°C; Humedad: 53%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:32:10,888 [INFO] Temperatura: 13°C; Humedad: 53%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:32:20,888 [INFO] Temperatura: 13°C; Humedad: 53%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:32:21,415 [INFO] Temperatura: 13°C; Humedad: 53%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:32:31,414 [INFO] Temperatura: 13°C; Humedad: 53%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:32:31,942 [INFO] Temperatura: 13°C; Humedad: 53%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:32:41,941 [INFO] Temperatura: 13°C; Humedad: 53%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:32:42,469 [INFO] Temperatura: 13°C; Humedad: 53%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:32:46,138 [INFO] Temperatura: 13°C; Humedad: 53%
+2022-08-21 08:32:52,468 [INFO] Temperatura: 13°C; Humedad: 53%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:32:52,996 [INFO] Temperatura: 13°C; Humedad: 53%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:33:02,994 [INFO] Temperatura: 13°C; Humedad: 53%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:33:03,523 [INFO] Temperatura: 13°C; Humedad: 53%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:33:13,521 [INFO] Temperatura: 13°C; Humedad: 53%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:33:14,051 [INFO] Temperatura: 13°C; Humedad: 53%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:33:24,049 [INFO] Temperatura: 13°C; Humedad: 53%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:33:24,579 [INFO] Temperatura: 13°C; Humedad: 53%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:33:34,576 [INFO] Temperatura: 13°C; Humedad: 53%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:33:35,105 [INFO] Temperatura: 13°C; Humedad: 53%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:33:45,102 [INFO] Temperatura: 13°C; Humedad: 53%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:33:47,851 [INFO] Temperatura: 13°C; Humedad: 53%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:33:47,853 [INFO] Temperatura: 13°C; Humedad: 53%
+2022-08-21 08:33:57,852 [INFO] Temperatura: 13°C; Humedad: 53%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:33:58,380 [INFO] Temperatura: 13°C; Humedad: 53%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:34:08,381 [INFO] Temperatura: 13°C; Humedad: 53%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:34:08,908 [INFO] Temperatura: 13°C; Humedad: 53%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:34:18,907 [INFO] Temperatura: 13°C; Humedad: 53%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:34:19,435 [INFO] Temperatura: 13°C; Humedad: 53%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:34:29,434 [INFO] Temperatura: 13°C; Humedad: 53%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:34:29,963 [INFO] Temperatura: 13°C; Humedad: 53%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:34:39,960 [INFO] Temperatura: 13°C; Humedad: 53%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:34:40,489 [INFO] Temperatura: 13°C; Humedad: 53%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:34:47,854 [INFO] Temperatura: 13°C; Humedad: 53%
+2022-08-21 08:34:50,487 [INFO] Temperatura: 13°C; Humedad: 53%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:34:51,017 [INFO] Temperatura: 13°C; Humedad: 53%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:35:01,013 [INFO] Temperatura: 13°C; Humedad: 53%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:35:02,865 [INFO] Temperatura: 13°C; Humedad: 53%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:35:12,862 [INFO] Temperatura: 13°C; Humedad: 53%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:35:13,392 [INFO] Temperatura: 13°C; Humedad: 52%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:35:23,389 [INFO] Temperatura: 13°C; Humedad: 52%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:35:23,921 [INFO] Temperatura: 13°C; Humedad: 53%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:35:33,916 [INFO] Temperatura: 13°C; Humedad: 53%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:35:34,448 [INFO] Temperatura: 13°C; Humedad: 53%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:35:44,443 [INFO] Temperatura: 13°C; Humedad: 53%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:35:44,974 [INFO] Temperatura: 13°C; Humedad: 53%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:35:47,855 [INFO] Temperatura: 13°C; Humedad: 53%
+2022-08-21 08:35:54,969 [INFO] Temperatura: 13°C; Humedad: 53%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:35:55,501 [INFO] Temperatura: 13°C; Humedad: 53%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:36:05,496 [INFO] Temperatura: 13°C; Humedad: 53%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:36:06,028 [INFO] Temperatura: 13°C; Humedad: 53%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:36:16,023 [INFO] Temperatura: 13°C; Humedad: 53%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:36:16,555 [INFO] Temperatura: 13°C; Humedad: 53%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:36:26,551 [INFO] Temperatura: 13°C; Humedad: 53%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:36:28,326 [INFO] Temperatura: 13°C; Humedad: 52%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:36:38,326 [INFO] Temperatura: 13°C; Humedad: 52%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:36:38,853 [INFO] Temperatura: 13°C; Humedad: 52%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:36:47,856 [INFO] Temperatura: 13°C; Humedad: 52%
+2022-08-21 08:36:48,852 [INFO] Temperatura: 13°C; Humedad: 52%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:36:49,380 [INFO] Temperatura: 13°C; Humedad: 53%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:36:59,378 [INFO] Temperatura: 13°C; Humedad: 53%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:36:59,907 [INFO] Temperatura: 13°C; Humedad: 53%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:37:09,905 [INFO] Temperatura: 13°C; Humedad: 53%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:37:10,433 [INFO] Temperatura: 13°C; Humedad: 52%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:37:20,432 [INFO] Temperatura: 13°C; Humedad: 52%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:37:20,960 [INFO] Temperatura: 13°C; Humedad: 53%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:37:30,958 [INFO] Temperatura: 13°C; Humedad: 53%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:37:31,487 [INFO] Temperatura: 13°C; Humedad: 52%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:37:41,485 [INFO] Temperatura: 13°C; Humedad: 52%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:37:42,013 [INFO] Temperatura: 13°C; Humedad: 52%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:37:47,857 [INFO] Temperatura: 13°C; Humedad: 52%
+2022-08-21 08:37:52,012 [INFO] Temperatura: 13°C; Humedad: 52%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:37:52,540 [INFO] Temperatura: 13°C; Humedad: 53%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:38:02,538 [INFO] Temperatura: 13°C; Humedad: 53%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:38:03,067 [INFO] Temperatura: 13°C; Humedad: 52%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:38:13,065 [INFO] Temperatura: 13°C; Humedad: 52%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:38:13,594 [INFO] Temperatura: 13°C; Humedad: 52%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado
+2022-08-21 08:38:23,594 [INFO] Temperatura: 13°C; Humedad: 52%. Temperatura seleccionada: 25°C. Calefactor encendido y ventilación apagada
+2022-08-21 08:38:24,122 [INFO] Temperatura: 13°C; Humedad: 52%. Humedad seleccionada: 65°C. Humidificador encendido y deshumidificador apagado

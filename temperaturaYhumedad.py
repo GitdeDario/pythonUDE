@@ -11,7 +11,7 @@ import logging          # para generar los log en un archivo txt
 import os               # para poder ejecutar comandos. En particular se usa para abrir el archivo de logs
 from email.message import EmailMessage    # librería para enviar correos
 import smtplib                            # librería que trabaja en conjunto con la anterior para gestión de protocolo smtp
-import pywhatkit
+
 
 # CONSTANTES
 TEMP_MIN = 10       # Temperatura mínima que se puede elegir
@@ -98,7 +98,7 @@ cuadro_de_texto_temp_umbral.focus()
 etiqueta_alarmas = Label(ventana, text="Control de Alarmas", font=("Arial",15))
 etiqueta_alarmas.grid(row = 2, column = COL_ALARMAS, padx = 10, pady = 10, sticky = "nsew")
 muestra_alarma = Label(ventana, font=("Arial",25), fg = "red")
-muestra_alarma.grid(row = 9, column = COL_ALARMAS+3, padx = 10, pady = 10, sticky = "nsew")
+muestra_alarma.grid(row = 9, column = COL_ALARMAS+1, padx = 10, pady = 10, sticky = "nsew")
 
 # Configuración y cabezal del archivo LOG
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s",handlers=[logging.FileHandler("logTemperatura_Humedad.txt"),])
@@ -288,9 +288,6 @@ def enviar_correo():
         smtp.sendmail(remitente, destinatario, email.as_string())
         smtp.quit()
 
-def enviar_whatsapp():
-    pywhatkit.sendwhatmsg_instantly("+59898784063", "Hola")
-
 # Setea la temperatura a parit de la cual, si se registra una superior, se dispara una alarma
 def set_umbral_alarma():
     global temp_umbral
@@ -310,7 +307,6 @@ def alarma_por_temperatura():
         flag_alarma_temp = True
         muestra_alarma.config(text = "ALARMA")
         enviar_correo()
-        enviar_whatsapp()
         logging.info("SE REGISTRÓ UNA ALARMA POR ALTA TEMPERATURA.Temperatura: %s°C; Umbral: %s°C" %(ultima_temperatura_medida, temp_umbral))
     
     ventana.after(TIEMPO_REFRESCO_LECTURA_TEMPERATURA, alarma_por_temperatura)
